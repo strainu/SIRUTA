@@ -38,7 +38,7 @@ class SirutaCsv:
         self._countyfile = countyfilename
         self._data = []
         self._prefixes = ['JUDEȚUL', 'MUNICIPIUL', 'ORAȘ', 'BUCUREȘTI']
-        self.parse_File()
+        self.parse_file()
         
     def parse_file(self):
         """
@@ -51,12 +51,39 @@ class SirutaCsv:
         
         """
         pass
+        
+    def siruta_is_valid(self, siruta):
+        """
+        Check if the siruta code is valid according to the algorithm
+        from insse.ro
+        
+        :param siruta: The SIRUTA code for which we want the name
+        :type siruta: int
+            
+        :return: True if the code is valid, False otherwise
+        :rtype: bool
+        
+        """
+        weights = [1, 2, 3, 5, 7]
+        checksum = 0
+        checkdigit = siruta % 10
+        index = 0
+        siruta /= 10
+        while (siruta):
+            left = (siruta % 10) * weights[index]
+            checksum += sum(map(int,str(left))) # sum of digits of left
+            index += 1
+            siruta /= 10
+        checksum %= 10
+        checksum = 11 - checksum
+        checksum %= 10
+        return checksum == checkdigit
     
     def get_name(self, siruta):
         """Get the entity name for the given siruta code
         
         :param siruta: The SIRUTA code for which we want the name
-        :type siruta: string
+        :type siruta: int
             
         :return: The name of the entity or None if the code is not in the database
         :rtype: string

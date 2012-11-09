@@ -12,6 +12,10 @@ class TestSirutaCsv(unittest.TestCase):
     def test_get_name(self):
         pass
         
+    def test_siruta_is_valid(self):
+        self.assertTrue(self._csv.siruta_is_valid(179132))
+        self.assertFalse(self._csv.siruta_is_valid(179197))
+        
     def test_get_sup_name(self):
         pass
         
