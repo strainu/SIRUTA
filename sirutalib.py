@@ -33,14 +33,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 class SirutaCsv:
-    def __init__(self, filename = "./siruta.csv", countyfilename = ""):
+    def __init__(self, filename="./siruta.csv", countyfilename=""):
         self._file = filename
         self._countyfile = countyfilename
         self._data = []
         self._prefixes = ['JUDEȚUL', 'MUNICIPIUL', 'ORAȘ', 'BUCUREȘTI']
-        self.parseFile()
+        self.parse_File()
         
-    def parseFile(self):
+    def parse_file(self):
         """
         Parse a csv file extracted from the official mdb database.
         
@@ -52,7 +52,7 @@ class SirutaCsv:
         """
         pass
     
-    def getName(self, siruta):
+    def get_name(self, siruta):
         """Get the entity name for the given siruta code
         
         :param siruta: The SIRUTA code for which we want the name
@@ -64,64 +64,64 @@ class SirutaCsv:
         """
         pass
         
-    def getSupName(self, siruta):
+    def get_sup_name(self, siruta):
         """Get the superior entity name for the given siruta code"""
         pass
         
-    def getSupCode(self, siruta):
+    def get_sup_code(self, siruta):
         """Get the superior entity code for the given siruta code"""
         pass
         
-    def getPostalCode(self, siruta):
+    def get_postal_code(self, siruta):
         """Get the entity's postal code for the given siruta code"""
         pass
     
-    def getType(self, siruta):
+    def get_type(self, siruta):
         """Get the entity's type for the given siruta code"""
         pass
         
-    def getCounty(self, siruta):
+    def get_county(self, siruta):
         """Get the entity's county for the given siruta code"""
         pass
         
-    def getRegion(self, siruta):
+    def get_region(self, siruta):
         """Get the entity's region for the given siruta code"""
         pass
         
-    def getCodeByName(self, name):
+    def get_code_by_name(self, name):
         pass
         
-    def getSupCodeByName(self, name):
+    def get_sup_code_by_name(self, name):
         """Get the superior entity code for the given name"""
         pass
         
-    def getSupNameByName(self, name):
+    def get_sup_name_by_name(self, name):
         """Get the superior entity name for the given name"""
         pass
         
-    def getPostalCodeByName(self, siruta):
+    def get_postal_code_by_name(self, siruta):
         """Get the entity's postal code for the given name"""
         pass
     
-    def getTypeByName(self, siruta):
+    def get_type_by_name(self, siruta):
         """Get the entity's type for the given name"""
         pass
         
-    def getCountyByName(self, siruta):
+    def get_county_by_name(self, siruta):
         """Get the entity's county for the given name"""
         pass
         
-    def getRegionByName(self, siruta):
+    def get_region_by_name(self, siruta):
         """Get the entity's region for the given name"""
         pass
         
-    def getInfCodes(self, siruta):
+    def get_inf_codes(self, siruta):
         """Get all the entities that have the given siruta code as \
 superior code
 
         """
         pass
         
-    def getAllCounties(self, prefix=True):
+    def get_all_counties(self, prefix=True):
         """Get all county names from the database"""
         pass
