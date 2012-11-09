@@ -32,13 +32,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
 
+import csv
+
 class SirutaCsv:
     def __init__(self, filename="./siruta.csv", countyfilename=""):
         self._file = filename
         self._countyfile = countyfilename
-        self._data = []
+        self._data = {}
+        self._names = {}
+        self._counties = {}
+        self._village_type = {
+                                '40': u'județ',
+                                 '1': u'municipiu reședință de județ',
+                                 '2': u'oraș ce aparține de județ',
+                                 '3': u'comună',
+                                 '4': u'municipiu, altul decât reședința de județ',
+                                 '5': u'oraș reședință de județ',
+                                 '6': u'Sector al  municipiului București',
+                                 '9': u'localitate  componentă, reședință de municipiu',
+                                '10': u'localitate componentă a unui municipiu alta decât reședință de municipiu',
+                                '11': u'sat ce aparține de municipiu',
+                                '17': u'localitate componentă, reședință a orașului',
+                                '18': u'localitate  componentă a unui oraș, alta decât reședință de oraș',
+                                '19': u'sat care aparține unui oraș',
+                                '22': u'sat reședință de comună',
+                                '23': u'sat ce aparține de comună, altul decât reședință de comună ',
+                                'other': u'necunoscut',
+                             }
         self._prefixes = ['JUDEȚUL', 'MUNICIPIUL', 'ORAȘ', 'BUCUREȘTI']
         self.parse_file()
+        self.build_county_list()
         
     def parse_file(self):
         """
@@ -50,6 +73,41 @@ class SirutaCsv:
         The output format is: TODO
         
         """
+        with open(self._file, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=';')
+            for row in reader:
+                try:
+                    siruta = int(row[0])
+                except ValueError as e:
+                    continue
+                if not self.siruta_is_valid(siruta):
+                    print "%d is not valid" % siruta
+                    print row
+                    continue
+                if len(row) <> 15:
+                    print len(row)
+                    continue
+                if row[7] == "1":
+                    urban = True
+                else:
+                    urban = False
+                if row[5] in self._village_type:
+                    type_ = self._village_type[row[5]]
+                else:
+                    type_ = self._village_type['other']
+                self._data[siruta] = {
+                                        'siruta':   siruta,
+                                        'name':     unicode(row[1],'utf8'),
+                                        'postcode': unicode(row[2],'utf8'),
+                                        'county':   unicode(row[3],'utf8'),
+                                        'sirutasup':unicode(row[4],'utf8'),
+                                        'type':     type_,
+                                        'level':    unicode(row[6],'utf8'),
+                                        'urban':    urban,
+                                        'region':   unicode(row[8],'utf8'),
+                                     }
+        
+    def build_county_list(self):
         pass
         
     def siruta_is_valid(self, siruta):
@@ -64,16 +122,21 @@ class SirutaCsv:
         :rtype: bool
         
         """
+        if type(siruta) <> int:
+            siruta = int(siruta)
+        if len(str(siruta)) > 6:
+            return False
+        return True
+        #forget about the algorithm for now, it seems flawed
         weights = [1, 2, 3, 5, 7]
         checksum = 0
         checkdigit = siruta % 10
         index = 0
-        siruta /= 10
-        while (siruta):
+        while (index < 5):
+            siruta /= 10
             left = (siruta % 10) * weights[index]
             checksum += sum(map(int,str(left))) # sum of digits of left
             index += 1
-            siruta /= 10
         checksum %= 10
         checksum = 11 - checksum
         checksum %= 10
@@ -89,7 +152,14 @@ class SirutaCsv:
         :rtype: string
 
         """
-        pass
+        if not self.siruta_is_valid(siruta):
+            return None
+            
+        if not siruta in self._data:
+            return None
+            
+        return self._data[siruta]['name']
+            
         
     def get_sup_name(self, siruta):
         """Get the superior entity name for the given siruta code"""

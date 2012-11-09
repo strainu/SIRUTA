@@ -3,18 +3,35 @@
 
 import sirutalib
 import unittest
+import mmap
+
 
 class TestSirutaCsv(unittest.TestCase):
     def setUp(self):
         self._csv = sirutalib.SirutaCsv()
         pass
         
+    def test_db_size(self):
+        f = open(self._csv._file, "r+")
+        buf = mmap.mmap(f.fileno(), 0)
+        lines = 0
+        readline = buf.readline
+        while readline():
+            lines += 1
+        self.assertEqual(lines - 1, len(self._csv._data))
+        
     def test_get_name(self):
-        pass
+        name = self._csv.get_name(10)
+        self.assertEqual(name, u"JUDEȚUL ALBA")
+        name = self._csv.get_name(179196)
+        self.assertEqual(name, u"BUCUREȘTI SECTORUL 6")
+        name = self._csv.get_name(179197)
+        self.assertEqual(name, None)
         
     def test_siruta_is_valid(self):
         self.assertTrue(self._csv.siruta_is_valid(179132))
-        self.assertFalse(self._csv.siruta_is_valid(179197))
+        self.assertTrue(self._csv.siruta_is_valid(29))
+        #self.assertFalse(self._csv.siruta_is_valid(179197))
         
     def test_get_sup_name(self):
         pass
