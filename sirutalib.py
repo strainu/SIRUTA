@@ -33,33 +33,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import csv
+import locale
 
 class SirutaCsv:
-    def __init__(self, filename="./siruta.csv", countyfilename=""):
+    def __init__(self, filename="./siruta.csv"):
         self._file = filename
-        self._countyfile = countyfilename
         self._data = {}
         self._names = {}
         self._counties = {}
         self._village_type = {
-                                '40': u'județ',
-                                 '1': u'municipiu reședință de județ',
-                                 '2': u'oraș ce aparține de județ',
-                                 '3': u'comună',
-                                 '4': u'municipiu, altul decât reședința de județ',
-                                 '5': u'oraș reședință de județ',
-                                 '6': u'Sector al  municipiului București',
-                                 '9': u'localitate  componentă, reședință de municipiu',
-                                '10': u'localitate componentă a unui municipiu alta decât reședință de municipiu',
-                                '11': u'sat ce aparține de municipiu',
-                                '17': u'localitate componentă, reședință a orașului',
-                                '18': u'localitate  componentă a unui oraș, alta decât reședință de oraș',
-                                '19': u'sat care aparține unui oraș',
-                                '22': u'sat reședință de comună',
-                                '23': u'sat ce aparține de comună, altul decât reședință de comună ',
-                                'other': u'necunoscut',
+                                 1: u'municipiu reședință de județ',
+                                 2: u'oraș ce aparține de județ',
+                                 3: u'comună',
+                                 4: u'municipiu, altul decât reședința de județ',
+                                 5: u'oraș reședință de județ',
+                                 6: u'Sector al  municipiului București',
+                                 9: u'localitate  componentă, reședință de municipiu',
+                                10: u'localitate componentă a unui municipiu alta decât reședință de municipiu',
+                                11: u'sat ce aparține de municipiu',
+                                17: u'localitate componentă, reședință a orașului',
+                                18: u'localitate  componentă a unui oraș, alta decât reședință de oraș',
+                                19: u'sat care aparține unui oraș',
+                                22: u'sat reședință de comună',
+                                23: u'sat ce aparține de comună, altul decât reședință de comună ',
+                                40: u'județ',
                              }
-        self._prefixes = ['JUDEȚUL', 'MUNICIPIUL', 'ORAȘ', 'BUCUREȘTI']
+        self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
+        self._unknown = u"necunoscut"
         self.parse_file()
         self.build_county_list()
         
@@ -91,24 +91,28 @@ class SirutaCsv:
                     urban = True
                 else:
                     urban = False
-                if row[5] in self._village_type:
-                    type_ = self._village_type[row[5]]
-                else:
-                    type_ = self._village_type['other']
                 self._data[siruta] = {
                                         'siruta':   siruta,
                                         'name':     unicode(row[1],'utf8'),
                                         'postcode': unicode(row[2],'utf8'),
-                                        'county':   unicode(row[3],'utf8'),
+                                        'county':   int(row[3]),
                                         'sirutasup':unicode(row[4],'utf8'),
-                                        'type':     type_,
+                                        'type':     int(row[5]),
                                         'level':    unicode(row[6],'utf8'),
                                         'urban':    urban,
                                         'region':   unicode(row[8],'utf8'),
                                      }
         
     def build_county_list(self):
-        pass
+        """
+        Build a dictionary of counties. 
+        
+        Parse the whole siruta table for entries with type == 40
+        
+        """
+        for entry in self._data.values():
+            if entry['type'] == 40:
+                self._counties[entry['county']] = entry['name']
         
     def siruta_is_valid(self, siruta):
         """
@@ -174,43 +178,79 @@ class SirutaCsv:
         pass
     
     def get_type(self, siruta):
-        """Get the entity's type for the given siruta code"""
-        pass
+        """Get the entity's type for the given siruta code
+        
+        :rtype: int
+        
+        """
+        return self._data[siruta]['type']
+    
+    def get_type_string(self, siruta):
+        """Get the entity's type for the given siruta code as string
+        
+        :rtype: string
+        
+        """
+        type_ = self._data[siruta]['type']
+        if type_ in self._village_type:
+            return self._village_type[type_]
+        else:
+            return self._unknown
         
     def get_county(self, siruta):
-        """Get the entity's county for the given siruta code"""
-        pass
+        """Get the entity's county for the given siruta code as int
+        
+        :rtype: int
+        
+        """
+        return self._data[siruta]['county']
+        
+    def get_county_string(self, siruta, prefix=True):
+        """Get the entity's county for the given siruta code as int
+        
+        :rtype: int
+        
+        """
+        county = self._data[siruta]['county']
+        if county in self._counties:
+            if prefix:
+                return self._counties[county]
+            else:
+                return self._counties[county].replace(self._prefixes[0], "")
+        else:
+            return self._unknown
         
     def get_region(self, siruta):
         """Get the entity's region for the given siruta code"""
         pass
         
     def get_code_by_name(self, name):
-        pass
+        """Get the entity's code for the given name"""
+        raise NotImplementedError()
         
     def get_sup_code_by_name(self, name):
         """Get the superior entity code for the given name"""
-        pass
+        raise NotImplementedError()
         
     def get_sup_name_by_name(self, name):
         """Get the superior entity name for the given name"""
-        pass
+        raise NotImplementedError()
         
     def get_postal_code_by_name(self, siruta):
         """Get the entity's postal code for the given name"""
-        pass
+        raise NotImplementedError()
     
     def get_type_by_name(self, siruta):
         """Get the entity's type for the given name"""
-        pass
+        raise NotImplementedError()
         
     def get_county_by_name(self, siruta):
         """Get the entity's county for the given name"""
-        pass
+        raise NotImplementedError()
         
     def get_region_by_name(self, siruta):
         """Get the entity's region for the given name"""
-        pass
+        raise NotImplementedError()
         
     def get_inf_codes(self, siruta):
         """Get all the entities that have the given siruta code as \
@@ -221,4 +261,11 @@ superior code
         
     def get_all_counties(self, prefix=True):
         """Get all county names from the database"""
-        pass
+        # this reads the environment and inits the right locale
+        locale.setlocale(locale.LC_ALL, "")
+        ret = self._counties.values()
+        ret.sort(cmp=locale.strcoll)
+        if not prefix:
+            for index in range(len(ret)):
+                ret[index] = ret[index].replace(self._prefixes[0], u"")
+        return ret
