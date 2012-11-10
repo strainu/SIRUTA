@@ -115,13 +115,13 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertFalse(self._csv.siruta_is_valid(179197))
         
     def test_get_sup_name(self):
-        self.skipTest("not implemented")
+        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_sup_code(self):
-        self.skipTest("not implemented")
+        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_postal_code(self):
-        self.skipTest("not implemented")
+        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
     
     def test_get_type(self):
         self.assertEqual(self._csv.get_type(179132), 9)
@@ -143,7 +143,7 @@ class TestSirutaCsv(unittest.TestCase):
                          u"JUDEȚUL HARGHITA")
         
     def test_get_region(self):
-        self.skipTest("not implemented")
+        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_code_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
@@ -167,7 +167,7 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_inf_codes(self):
-        self.skipTest("not implemented")
+        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_all_counties(self):
         self.maxDiff = None

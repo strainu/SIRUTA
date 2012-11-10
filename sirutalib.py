@@ -167,15 +167,15 @@ class SirutaCsv:
         
     def get_sup_name(self, siruta):
         """Get the superior entity name for the given siruta code"""
-        pass
+        raise NotImplementedError()
         
     def get_sup_code(self, siruta):
         """Get the superior entity code for the given siruta code"""
-        pass
+        raise NotImplementedError()
         
     def get_postal_code(self, siruta):
         """Get the entity's postal code for the given siruta code"""
-        pass
+        raise NotImplementedError()
     
     def get_type(self, siruta):
         """Get the entity's type for the given siruta code
@@ -222,7 +222,7 @@ class SirutaCsv:
         
     def get_region(self, siruta):
         """Get the entity's region for the given siruta code"""
-        pass
+        raise NotImplementedError()
         
     def get_code_by_name(self, name):
         """Get the entity's code for the given name"""
@@ -257,7 +257,7 @@ class SirutaCsv:
 superior code
 
         """
-        pass
+        raise NotImplementedError()
         
     def get_all_counties(self, prefix=True):
         """Get all county names from the database"""
