@@ -108,66 +108,73 @@ class TestSirutaCsv(unittest.TestCase):
     def test_siruta_is_valid(self):
         self.assertTrue(self._csv.siruta_is_valid(179132))
         self.assertTrue(self._csv.siruta_is_valid(29))
+        self.assertFalse(self._csv.siruta_is_valid(1234567))
         self.skipTest("https://github.com/strainu/SIRUTA/issues/3")
         #this is a real, wrong SIRUTA code
         self.assertFalse(self._csv.siruta_is_valid(86453))
-        #this is a wrong SIRUTA code
+        #this is an imaginary, wrong SIRUTA code
         self.assertFalse(self._csv.siruta_is_valid(179197))
         
     def test_get_sup_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_sup_name, "JUDEȚUL ALBA")
         
     def test_get_sup_code(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_sup_code, "JUDEȚUL ALBA")
         
     def test_get_postal_code(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_postal_code, "JUDEȚUL ALBA")
     
     def test_get_type(self):
         self.assertEqual(self._csv.get_type(179132), 9)
         self.assertEqual(self._csv.get_type(86453), 3)
+        self.assertEqual(self._csv.get_type(179197), None)
         
     def test_get_county(self):
         self.assertEqual(self._csv.get_county(179132), 40)
         self.assertEqual(self._csv.get_county(86453), 19)
+        self.assertEqual(self._csv.get_county(179197), None)
     
     def test_get_type_string(self):
         self.assertEqual(self._csv.get_type_string(179132), 
                          u"localitate  componentă, reședință de municipiu")
         self.assertEqual(self._csv.get_type_string(86453), u"comună")
+        self.assertEqual(self._csv.get_type_string(179197), None)
         
     def test_get_county_string(self):
         self.assertEqual(self._csv.get_county_string(179132), 
                          u"MUNICIPIUL BUCUREȘTI")
         self.assertEqual(self._csv.get_county_string(86453), 
                          u"JUDEȚUL HARGHITA")
+        self.assertEqual(self._csv.get_county_string(86453, prefix=False), 
+                         u"HARGHITA")
+        self.assertEqual(self._csv.get_county_string(179197), None)
         
     def test_get_region(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_region, "JUDEȚUL ALBA")
         
     def test_get_code_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_sup_code_by_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_sup_code_by_name, "JUDEȚUL ALBA")
         
     def test_get_sup_name_by_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_sup_name_by_name, "JUDEȚUL ALBA")
         
     def test_get_postal_code_by_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_postal_code_by_name, "JUDEȚUL ALBA")
     
     def test_get_type_by_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_type_by_name, "JUDEȚUL ALBA")
         
     def test_get_county_by_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_county_by_name, "JUDEȚUL ALBA")
         
     def test_get_region_by_name(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_region_by_name, "JUDEȚUL ALBA")
         
     def test_get_inf_codes(self):
-        self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
+        self.assertRaises(NotImplementedError, self._csv.get_inf_codes, "JUDEȚUL ALBA")
         
     def test_get_all_counties(self):
         self.maxDiff = None

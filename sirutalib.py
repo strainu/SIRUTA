@@ -59,7 +59,6 @@ class SirutaCsv:
                                 40: u'județ',
                              }
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
-        self._unknown = u"necunoscut"
         self.parse_file()
         self.build_county_list()
         
@@ -180,37 +179,64 @@ class SirutaCsv:
     def get_type(self, siruta):
         """Get the entity's type for the given siruta code
         
+        :param siruta: The SIRUTA code for which we want the type
+        :type siruta: int
+        
+        :return: the entity's type if available, None otherwise
         :rtype: int
         
         """
+        if not siruta in self._data:
+            return None
+            
         return self._data[siruta]['type']
     
     def get_type_string(self, siruta):
         """Get the entity's type for the given siruta code as string
         
+        :param siruta: The SIRUTA code for which we want the type
+        :type siruta: int
+        
+        :return: the village type description if available, None otherwise
         :rtype: string
         
         """
+        if not siruta in self._data:
+            return None
+            
         type_ = self._data[siruta]['type']
         if type_ in self._village_type:
             return self._village_type[type_]
         else:
-            return self._unknown
+            return None
         
     def get_county(self, siruta):
         """Get the entity's county for the given siruta code as int
         
+        :param siruta: The SIRUTA code for which we want the county
+        :type siruta: int
+        
+        :return: the county code if available, None otherwise
         :rtype: int
         
         """
+        if not siruta in self._data:
+            return None
+            
         return self._data[siruta]['county']
         
     def get_county_string(self, siruta, prefix=True):
         """Get the entity's county for the given siruta code as int
         
+        :param siruta: The SIRUTA code for which we want the county
+        :type siruta: int
+        
         :rtype: int
         
         """
+        if not siruta in self._data:
+            return None
+            
         county = self._data[siruta]['county']
         if county in self._counties:
             if prefix:
@@ -218,7 +244,7 @@ class SirutaCsv:
             else:
                 return self._counties[county].replace(self._prefixes[0], "")
         else:
-            return self._unknown
+            return None
         
     def get_region(self, siruta):
         """Get the entity's region for the given siruta code"""
