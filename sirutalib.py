@@ -264,8 +264,8 @@ superior code
         # this reads the environment and inits the right locale
         locale.setlocale(locale.LC_ALL, "")
         ret = self._counties.values()
-        ret.sort(cmp=locale.strcoll)
         if not prefix:
             for index in range(len(ret)):
                 ret[index] = ret[index].replace(self._prefixes[0], u"")
+        ret.sort(cmp=locale.strcoll)
         return ret
