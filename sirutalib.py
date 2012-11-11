@@ -392,18 +392,18 @@ superior code
         """Get the superior entity name for the given name"""
         raise NotImplementedError()
         
-    def get_postal_code_by_name(self, siruta):
+    def get_postal_code_by_name(self, name):
         """Get the entity's postal code for the given name"""
         raise NotImplementedError()
     
-    def get_type_by_name(self, siruta):
+    def get_type_by_name(self, name):
         """Get the entity's type for the given name"""
         raise NotImplementedError()
         
-    def get_county_by_name(self, siruta):
+    def get_county_by_name(self, name):
         """Get the entity's county for the given name"""
         raise NotImplementedError()
         
-    def get_region_by_name(self, siruta):
+    def get_region_by_name(self, name):
         """Get the entity's region for the given name"""
         raise NotImplementedError()
