@@ -34,9 +34,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import csv
 import locale
+import warnings
+
+class SirutaCodeWarning(UserWarning):
+    """
+    This class defines a new type of warning, specific for SIRUTA
+    codes with errors
+    
+    """
+    pass
 
 class SirutaCsv:
-    def __init__(self, filename="./siruta.csv"):
+    def __init__(self, filename="./siruta.csv", enforceWarnings=False):
         self._file = filename
         self._data = {}
         self._names = {}
@@ -59,8 +68,17 @@ class SirutaCsv:
                                 40: u'județ',
                              }
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
+        self._enforceWarnings = enforceWarnings
         self.parse_file()
         self.build_county_list()
+        
+    def notify_error(self, message, enforce=False):
+        if enforce or self._enforceWarnings:
+            warnings.simplefilter("error")
+        else:
+            warnings.simplefilter("ignore")
+        warnings.warn(message, SirutaCodeWarning, stacklevel=2)
+        warnings.resetwarnings()
         
     def parse_file(self):
         """
@@ -80,11 +98,8 @@ class SirutaCsv:
                 except ValueError as e:
                     continue
                 if not self.siruta_is_valid(siruta):
-                    print "%d is not valid" % siruta
-                    print row
-                    continue
+                    self.notify_error("SIRUTA code %d is not valid" % siruta)
                 if len(row) <> 15:
-                    print len(row)
                     continue
                 if row[7] == "1":
                     urban = True
@@ -129,8 +144,6 @@ class SirutaCsv:
             siruta = int(siruta)
         if len(str(siruta)) > 6:
             return False
-        return True
-        #forget about the algorithm for now, it seems flawed
         weights = [1, 2, 3, 5, 7]
         checksum = 0
         checkdigit = siruta % 10
@@ -156,7 +169,7 @@ class SirutaCsv:
 
         """
         if not self.siruta_is_valid(siruta):
-            return None
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -186,6 +199,9 @@ class SirutaCsv:
         :rtype: int
         
         """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
         if not siruta in self._data:
             return None
             
@@ -201,6 +217,9 @@ class SirutaCsv:
         :rtype: string
         
         """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
         if not siruta in self._data:
             return None
             
@@ -220,6 +239,9 @@ class SirutaCsv:
         :rtype: int
         
         """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
         if not siruta in self._data:
             return None
             
@@ -234,6 +256,9 @@ class SirutaCsv:
         :rtype: int
         
         """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
         if not siruta in self._data:
             return None
             

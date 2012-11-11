@@ -28,11 +28,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 u"""
 
-import sirutalib
 import unittest
 import mmap
 import operator
 import locale
+
+import sirutalib
 
 county_names = [
 u"ALBA",
@@ -102,14 +103,16 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(name, u"JUDEȚUL ALBA")
         name = self._csv.get_name(179196)
         self.assertEqual(name, u"BUCUREȘTI SECTORUL 6")
-        name = self._csv.get_name(179197)
+        #correct, but inexistent code
+        name = self._csv.get_name(500)
         self.assertEqual(name, None)
+        self._csv._enforceWarnings = True
+        self.assertRaises(sirutalib.SirutaCodeWarning, self._csv.get_name, 179197)
         
     def test_siruta_is_valid(self):
         self.assertTrue(self._csv.siruta_is_valid(179132))
         self.assertTrue(self._csv.siruta_is_valid(29))
-        self.assertFalse(self._csv.siruta_is_valid(1234567))
-        self.skipTest("https://github.com/strainu/SIRUTA/issues/3")
+        self.assertFalse(self._csv.siruta_is_valid("1234567"))
         #this is a real, wrong SIRUTA code
         self.assertFalse(self._csv.siruta_is_valid(86453))
         #this is an imaginary, wrong SIRUTA code
