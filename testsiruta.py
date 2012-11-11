@@ -31,7 +31,6 @@ u"""
 import unittest
 import mmap
 import operator
-import locale
 
 import sirutalib
 
@@ -200,17 +199,13 @@ class TestSirutaCsv(unittest.TestCase):
         
     def test_get_all_counties(self):
         self.maxDiff = None
-        # this reads the environment and inits the right locale
-        locale.setlocale(locale.LC_ALL, "")
         
         county_names_without_prefix = county_names + [u"MUNICIPIUL BUCUREȘTI"]
-        county_names_without_prefix.sort(cmp=locale.strcoll)
-        self.assertEqual(self._csv.get_all_counties(prefix=False), county_names_without_prefix)
+        self.assertItemsEqual(self._csv.get_all_counties(prefix=False), county_names_without_prefix)
         
         county_names_with_prefix = map(operator.add, [u"JUDEȚUL "]*len(county_names), county_names)
         county_names_with_prefix.append(u"MUNICIPIUL BUCUREȘTI")
-        county_names_with_prefix.sort(cmp=locale.strcoll)
-        self.assertEqual(self._csv.get_all_counties(prefix=True), county_names_with_prefix)
+        self.assertItemsEqual(self._csv.get_all_counties(prefix=True), county_names_with_prefix)
     
     
 if __name__ == '__main__':
