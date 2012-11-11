@@ -108,13 +108,13 @@ class SirutaCsv:
                 self._data[siruta] = {
                                         'siruta':   siruta,
                                         'name':     unicode(row[1],'utf8'),
-                                        'postcode': unicode(row[2],'utf8'),
+                                        'postcode': int(row[2]),
                                         'county':   int(row[3]),
-                                        'sirutasup':unicode(row[4],'utf8'),
+                                        'sirutasup':int(row[4]),
                                         'type':     int(row[5]),
                                         'level':    unicode(row[6],'utf8'),
                                         'urban':    urban,
-                                        'region':   unicode(row[8],'utf8'),
+                                        'region':   int(row[8]),
                                      }
         
     def build_county_list(self):
@@ -164,7 +164,8 @@ class SirutaCsv:
         :param siruta: The SIRUTA code for which we want the name
         :type siruta: int
             
-        :return: The name of the entity or None if the code is not in the database
+        :return: The name of the entity or None if the code is not in \
+        the database
         :rtype: string
 
         """
@@ -175,19 +176,70 @@ class SirutaCsv:
             return None
             
         return self._data[siruta]['name']
-            
-        
-    def get_sup_name(self, siruta):
-        """Get the superior entity name for the given siruta code"""
-        raise NotImplementedError()
         
     def get_sup_code(self, siruta):
-        """Get the superior entity code for the given siruta code"""
-        raise NotImplementedError()
+        """Get the superior entity code for the given siruta code
+        
+        :param siruta: The SIRUTA code for which we want the superior's \
+        code
+        :type siruta: int
+            
+        :return: The code of the superior entity or None if the code \
+        is not in the database
+        :rtype: string
+        
+        """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
+        if not siruta in self._data:
+            return None
+            
+        return self._data[siruta]['sirutasup']
+        
+    def get_sup_name(self, siruta):
+        """Get the superior entity name for the given siruta code
+        
+        :param siruta: The SIRUTA code for which we want the name of \
+        the superior entity
+        :type siruta: int
+            
+        :return: The name of the superior entity or None if the code \
+        is not in the database
+        :rtype: string
+        
+        """
+        supcode = self.get_sup_code(siruta)
+        if supcode == None:
+            return None
+        
+        if not self.siruta_is_valid(supcode):
+            self.notify_error("The SIRUTA code of the superior entity" \
+            "(%d) is not valid for code %s" % (supcode,siruta))
+            
+        if not supcode in self._data:
+            return None
+            
+        return self._data[supcode]['name']
         
     def get_postal_code(self, siruta):
-        """Get the entity's postal code for the given siruta code"""
-        raise NotImplementedError()
+        """Get the entity's postal code for the given siruta code
+        
+        :param siruta: The SIRUTA code for which we want the postal code
+        :type siruta: int
+            
+        :return: The postal code of the entity or None if the SIRUTA \
+        code is not in the database
+        :rtype: string
+        
+        """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
+        if not siruta in self._data:
+            return None
+            
+        return self._data[siruta]['postcode']
     
     def get_type(self, siruta):
         """Get the entity's type for the given siruta code
@@ -272,8 +324,61 @@ class SirutaCsv:
             return None
         
     def get_region(self, siruta):
-        """Get the entity's region for the given siruta code"""
-        raise NotImplementedError()
+        """Get the entity's region for the given siruta code
+        
+        :param siruta: The SIRUTA code for which we want the region
+        :type siruta: int
+        
+        :return: the region code if available, None otherwise
+        :rtype: int
+        
+        """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
+        if not siruta in self._data:
+            return None
+            
+        return self._data[siruta]['region']
+        
+    def get_inf_codes(self, siruta):
+        """Get all the entities that have the given siruta code as \
+superior code
+        
+        :param siruta: The SIRUTA code for which we want the codes of \
+        the inferior entities
+        :type siruta: int
+        
+        :return: a list of entities that have siruta as their superior \
+        cod, None if there are no such entities
+        :rtype: list
+
+        """
+        if not self.siruta_is_valid(siruta):
+            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            
+        #we could skip this check, but we don't want weird supcodes
+        if not siruta in self._data:
+            return None
+            
+        ret = []
+        
+        for entry in self._data:
+            if self._data[entry]['sirutasup'] == siruta:
+                ret.append(entry)
+                
+        return ret
+        
+    def get_all_counties(self, prefix=True):
+        """Get all county names from the database"""
+        # this reads the environment and inits the right locale
+        locale.setlocale(locale.LC_ALL, "")
+        ret = self._counties.values()
+        if not prefix:
+            for index in range(len(ret)):
+                ret[index] = ret[index].replace(self._prefixes[0], u"")
+        ret.sort(cmp=locale.strcoll)
+        return ret
         
     def get_code_by_name(self, name):
         """Get the entity's code for the given name"""
@@ -302,21 +407,3 @@ class SirutaCsv:
     def get_region_by_name(self, siruta):
         """Get the entity's region for the given name"""
         raise NotImplementedError()
-        
-    def get_inf_codes(self, siruta):
-        """Get all the entities that have the given siruta code as \
-superior code
-
-        """
-        raise NotImplementedError()
-        
-    def get_all_counties(self, prefix=True):
-        """Get all county names from the database"""
-        # this reads the environment and inits the right locale
-        locale.setlocale(locale.LC_ALL, "")
-        ret = self._counties.values()
-        if not prefix:
-            for index in range(len(ret)):
-                ret[index] = ret[index].replace(self._prefixes[0], u"")
-        ret.sort(cmp=locale.strcoll)
-        return ret
