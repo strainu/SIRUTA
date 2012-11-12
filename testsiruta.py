@@ -32,7 +32,6 @@ import unittest
 import mmap
 import operator
 
-import sirutalib
 
 county_names = [
 u"ALBA",
@@ -79,9 +78,14 @@ u"VRANCEA",
 ]
 
 
+def setUpModule(self):
+    import sirutalib
+    self.siruta = sirutalib.SirutaCsv()
+
+
 class TestSirutaCsv(unittest.TestCase):
     def setUp(self):
-        self._csv = sirutalib.SirutaCsv()
+        self._csv = siruta
         
     def test_db_size(self):
         f = open(self._csv._file, "r+")
@@ -98,6 +102,7 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(u"JUDEȚUL ARGEȘ", self._csv._counties[3])
         
     def test_get_name(self):
+        import sirutalib
         name = self._csv.get_name(10)
         self.assertEqual(name, u"JUDEȚUL ALBA")
         name = self._csv.get_name(179196)
@@ -106,8 +111,11 @@ class TestSirutaCsv(unittest.TestCase):
         name = self._csv.get_name(500)
         self.assertEqual(name, None)
         self._csv._enforceWarnings = True
-        self.assertRaises(sirutalib.SirutaCodeWarning, 
-                          self._csv.get_name, 179197)
+        try:
+            self.assertRaises(sirutalib.SirutaCodeWarning, 
+                              self._csv.get_name, 179197)
+        finally:
+            self._csv._enforceWarnings = False
         
     def test_siruta_is_valid(self):
         self.assertTrue(self._csv.siruta_is_valid(179132))
