@@ -51,22 +51,22 @@ class SirutaCsv:
         self._names = {}
         self._counties = {}
         self._village_type = {
-                                 1: u'municipiu reședință de județ',
-                                 2: u'oraș ce aparține de județ',
-                                 3: u'comună',
-                                 4: u'municipiu, altul decât reședința de județ',
-                                 5: u'oraș reședință de județ',
-                                 6: u'Sector al  municipiului București',
-                                 9: u'localitate  componentă, reședință de municipiu',
-                                10: u'localitate componentă a unui municipiu alta decât reședință de municipiu',
-                                11: u'sat ce aparține de municipiu',
-                                17: u'localitate componentă, reședință a orașului',
-                                18: u'localitate  componentă a unui oraș, alta decât reședință de oraș',
-                                19: u'sat care aparține unui oraș',
-                                22: u'sat reședință de comună',
-                                23: u'sat ce aparține de comună, altul decât reședință de comună ',
-                                40: u'județ',
-                             }
+            1:  u'municipiu reședință de județ',
+            2:  u'oraș ce aparține de județ',
+            3:  u'comună',
+            4:  u'municipiu, altul decât reședința de județ',
+            5:  u'oraș reședință de județ',
+            6:  u'Sector al  municipiului București',
+            9:  u'localitate  componentă, reședință de municipiu',
+            10: u'localitate componentă a unui municipiu alta decât reședință de municipiu',
+            11: u'sat ce aparține de municipiu',
+            17: u'localitate componentă, reședință a orașului',
+            18: u'localitate  componentă a unui oraș, alta decât reședință de oraș',
+            19: u'sat care aparține unui oraș',
+            22: u'sat reședință de comună',
+            23: u'sat ce aparține de comună, altul decât reședință de comună ',
+            40: u'județ',
+        }
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
         self._enforceWarnings = enforceWarnings
         self.parse_file()
