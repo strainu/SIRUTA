@@ -78,14 +78,13 @@ u"VRANCEA",
 ]
 
 
-def setUpModule(self):
-    import sirutalib
-    self.siruta = sirutalib.SirutaCsv()
-
-
 class TestSirutaCsv(unittest.TestCase):
+    _csv = None
+    
     def setUp(self):
-        self._csv = siruta
+        import sirutalib
+        if TestSirutaCsv._csv is None:
+            TestSirutaCsv._csv = sirutalib.SirutaCsv()
         
     def test_db_size(self):
         f = open(self._csv._file, "r+")
