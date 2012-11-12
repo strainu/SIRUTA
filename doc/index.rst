@@ -3,10 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to SIRUTA's documentation!
-==================================
+======================================================
+SIRUTAlib - a library for querying the SIRUTA database
+======================================================
 
-Contents:
+.. title:: SIRUTAlib - a library for querying the SIRUTA database
 
 .. toctree::
    :maxdepth: 2
@@ -15,5 +16,10 @@ Contents:
     :members:
     :undoc-members:
     :inherited-members:
+    :show-inheritance:
+    
+.. automodule:: testsiruta
+    :members:
+    :undoc-members:
     :show-inheritance:
 

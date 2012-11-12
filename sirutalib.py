@@ -1,34 +1,45 @@
 #!/usr/bin/python
 # -*- coding: utf-8  -*-
+
+#  Copyright (c) 2012, Andrei Cipu <strainu@strainu.ro>
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are
+#  met:
+#  
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above
+#    copyright notice, this list of conditions and the following disclaimer
+#    in the documentation and/or other materials provided with the
+#    distribution.
+#  * Neither the name of the  nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#  
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+#  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+#  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+#  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+#  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+#  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+#  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+#  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+#  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#  
+
 """
-:mod:`sirutalib` -- Siruta utility library
-==========================================
-Library created to parse a siruta CSV extract
+:mod:`sirutalib`
+================
+Library created to parse a SIRUTA CSV extract and allow simple access
+to the resulting database
 
-Copyright (c) 2012, Andrei Cipu <strainu@strainu.ro>
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-    * Neither the name of the original author nor the
-      names of its contributors may be used to endorse or promote products
-      derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-------
+Classes
+-------
 
 """
 
@@ -39,12 +50,32 @@ import warnings
 class SirutaCodeWarning(UserWarning):
     """
     This class defines a new type of warning, specific for SIRUTA
-    codes with errors
+    codes with errors. It is used solely to uniquely identify the
+    warnings thrown by this module.
     
     """
     pass
+    
+"""
+----------------
+Siruta Database
+----------------
 
-class SirutaCsv:
+"""
+
+class SirutaDatabase:
+    """
+    The main class, representing the SIRUTA database. 
+    
+    It reads data from a CSV file. The expected input format is: 
+    SIRUTA;DENLOC;CODP;JUD;SIRSUP;TIP;NIV;MED;REGIUNE;FSJ;FS2;FS3;FSL;rang;fictiv
+    
+    Documentation for these fiels can be found on the INSSE website.
+    
+    :param filename: the CSV file containing the data.
+    :param enforceWarnings: treat warnings as exceptions
+    
+    """
     def __init__(self, filename="./siruta.csv", enforceWarnings=False):
         self._file = filename
         self._data = {}
@@ -69,10 +100,10 @@ class SirutaCsv:
         }
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
         self._enforceWarnings = enforceWarnings
-        self.parse_file()
-        self.build_county_list()
+        self.__parse_file()
+        self.__build_county_list()
         
-    def notify_error(self, message, enforce=False):
+    def __notify_error(self, message, enforce=False):
         if enforce or self._enforceWarnings:
             warnings.simplefilter("error")
         else:
@@ -80,12 +111,9 @@ class SirutaCsv:
         warnings.warn(message, SirutaCodeWarning, stacklevel=2)
         warnings.resetwarnings()
         
-    def parse_file(self):
+    def __parse_file(self):
         """
         Parse a csv file extracted from the official mdb database.
-        
-        The expected input format is: 
-        SIRUTA;DENLOC;CODP;JUD;SIRSUP;TIP;NIV;MED;REGIUNE;FSJ;FS2;FS3;FSL;rang;fictiv
         
         The output format is: TODO
         
@@ -98,7 +126,7 @@ class SirutaCsv:
                 except ValueError as e:
                     continue
                 if not self.siruta_is_valid(siruta):
-                    self.notify_error("SIRUTA code %d is not valid" % siruta)
+                    self.__notify_error("SIRUTA code %d is not valid" % siruta)
                 if len(row) <> 15:
                     continue
                 if row[7] == "1":
@@ -117,7 +145,7 @@ class SirutaCsv:
                                         'region':   int(row[8]),
                                      }
         
-    def build_county_list(self):
+    def __build_county_list(self):
         """
         Build a dictionary of counties. 
         
@@ -130,13 +158,13 @@ class SirutaCsv:
         
     def siruta_is_valid(self, siruta):
         """
-        Check if the siruta code is valid according to the algorithm
-        from insse.ro
+        Utility function which checks if the siruta code is valid 
+        according to the algorithm from insse.ro
         
         :param siruta: The SIRUTA code for which we want the name
         :type siruta: int
             
-        :return: True if the code is valid, False otherwise
+        :return: ``True`` if the code is valid, ``False`` otherwise
         :rtype: bool
         
         """
@@ -170,7 +198,7 @@ class SirutaCsv:
 
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -184,13 +212,13 @@ class SirutaCsv:
         code
         :type siruta: int
             
-        :return: The code of the superior entity or None if the code \
-        is not in the database
+        :return: The code of the superior entity or ``None`` if the \
+        code is not in the database
         :rtype: string
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -204,8 +232,8 @@ class SirutaCsv:
         the superior entity
         :type siruta: int
             
-        :return: The name of the superior entity or None if the code \
-        is not in the database
+        :return: The name of the superior entity or ``None`` if the \
+        code is not in the database
         :rtype: string
         
         """
@@ -214,7 +242,7 @@ class SirutaCsv:
             return None
         
         if not self.siruta_is_valid(supcode):
-            self.notify_error("The SIRUTA code of the superior entity" \
+            self.__notify_error("The SIRUTA code of the superior entity" \
             "(%d) is not valid for code %s" % (supcode,siruta))
             
         if not supcode in self._data:
@@ -228,13 +256,13 @@ class SirutaCsv:
         :param siruta: The SIRUTA code for which we want the postal code
         :type siruta: int
             
-        :return: The postal code of the entity or None if the SIRUTA \
+        :return: The postal code of the entity or ``None`` if the SIRUTA\
         code is not in the database
         :rtype: string
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -247,12 +275,12 @@ class SirutaCsv:
         :param siruta: The SIRUTA code for which we want the type
         :type siruta: int
         
-        :return: the entity's type if available, None otherwise
+        :return: the entity's type if available, ``None`` otherwise
         :rtype: int
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -265,12 +293,13 @@ class SirutaCsv:
         :param siruta: The SIRUTA code for which we want the type
         :type siruta: int
         
-        :return: the village type description if available, None otherwise
+        :return: the village type description if available, ``None`` \
+        otherwise
         :rtype: string
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -287,12 +316,12 @@ class SirutaCsv:
         :param siruta: The SIRUTA code for which we want the county
         :type siruta: int
         
-        :return: the county code if available, None otherwise
+        :return: the county code if available, ``None`` otherwise
         :rtype: int
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -300,16 +329,16 @@ class SirutaCsv:
         return self._data[siruta]['county']
         
     def get_county_string(self, siruta, prefix=True):
-        """Get the entity's county for the given siruta code as int
+        """Get the entity's county for the given siruta code as string
         
         :param siruta: The SIRUTA code for which we want the county
         :type siruta: int
         
-        :rtype: int
+        :rtype: string
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -329,12 +358,12 @@ class SirutaCsv:
         :param siruta: The SIRUTA code for which we want the region
         :type siruta: int
         
-        :return: the region code if available, None otherwise
+        :return: the region code if available, ``None`` otherwise
         :rtype: int
         
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
             return None
@@ -350,12 +379,12 @@ superior code
         :type siruta: int
         
         :return: a list of entities that have siruta as their superior \
-        cod, None if there are no such entities
+        cod, ``None`` if there are no such entities
         :rtype: list
 
         """
         if not self.siruta_is_valid(siruta):
-            self.notify_error("SIRUTA code %d is not valid" % siruta)
+            self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         #we could skip this check, but we don't want weird supcodes
         if not siruta in self._data:
@@ -370,7 +399,15 @@ superior code
         return ret
         
     def get_all_counties(self, prefix=True):
-        """Get all county names from the database"""
+        """Get all county names from the database
+        
+        :param prefix: If ``False``, only the county name is returned, \
+        otherwise the prefix used for counties in the database is prepended
+        
+        :return: a list of all county names in Romania
+        :rtype: list
+        
+        """
         # this reads the environment and inits the right locale
         locale.setlocale(locale.LC_ALL, "")
         ret = self._counties.values()
