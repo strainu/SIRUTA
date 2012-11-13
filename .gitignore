@@ -1,3 +1,5 @@
 *.pyc
 .coverage
 doc/_*
+MANIFEST
+dist/
