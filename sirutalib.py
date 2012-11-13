@@ -40,6 +40,7 @@ to the resulting database
 import csv
 import locale
 import warnings
+import os
 
 class SirutaCodeWarning(UserWarning):
     """
@@ -66,12 +67,18 @@ class SirutaDatabase:
     
     Documentation for these fiels can be found on the INSSE website.
     
-    :param filename: the CSV file containing the data.
+    :param filename: the CSV file containing the data. This is either \
+    an abosulte path or a path relative to the current folder
     :param enforceWarnings: treat warnings as exceptions
     
     """
-    def __init__(self, filename="./siruta.csv", enforceWarnings=False):
-        self._file = filename
+    def __init__(self, filename="siruta.csv", enforceWarnings=False):
+        if os.path.isabs(filename):
+            self._file = filename
+        else:
+            self._file = os.path.join(
+                            os.path.dirname(os.path.abspath(__file__)), 
+                            filename)
         self._data = {}
         self._names = {}
         self._counties = {}
