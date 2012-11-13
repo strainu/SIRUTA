@@ -37,10 +37,6 @@
 Library created to parse a SIRUTA CSV extract and allow simple access
 to the resulting database
 
--------
-Classes
--------
-
 """
 
 import csv
