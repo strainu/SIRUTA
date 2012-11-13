@@ -11,15 +11,9 @@ The SIRUTA archives contain detailed documentation about the whole classificatio
 .. note::
     This library makes the assumption that SIRUTA codes shorter than 6 characters are filled with 0 to the left in order to calculate the checksum. There are 77 codes that do not respect this assumpsion. Out of those, 76 can be calculated if the code is filled with 0's to the *right*. The remaining code is 9026.
 
-Install
-=======
-
-.. include:: INSTALL.rst
-
-
 Development
 ===========
-To work on the PubDocs code, you only need a local repository checkout::
+To work on the SIRUTAlib code, you only need a local repository checkout::
 
     $ git clone https://github.com/strainu/SIRUTA.git
     $ cd siruta

@@ -14,8 +14,13 @@ SIRUTAlib - a library for querying the SIRUTA database
 
 .. include:: ../README.rst
 
+.. include:: ../INSTALL.rst
+
+Modules
+=======
+
 :mod:`sirutalib`
-================
+----------------
 .. automodule:: sirutalib
     :members:
     :undoc-members:
@@ -23,7 +28,7 @@ SIRUTAlib - a library for querying the SIRUTA database
     :show-inheritance:
     
 :mod:`testsiruta`
-=================
+-----------------
 .. automodule:: testsiruta
     :members:
     :undoc-members:
