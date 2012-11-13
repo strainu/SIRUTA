@@ -8,7 +8,7 @@ setup(name='SIRUTAlib',
       license='3-clause BSD',
       py_modules=['sirutalib'],
       data_files=[
-          ('.', ['siruta.csv','README.rst']),
+          ('.', ['siruta.csv','README.rst','INSTALL.rst']),
           ('doc/_build/html', ['index.html']),
           ],
       )
