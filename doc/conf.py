@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SIRUTA'
-copyright = u'2012, Andrei Cipu <strainu@strainu.ro>'
+copyright = u'2012, Andrei Cipu <siruta [at] strainu.ro>'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
