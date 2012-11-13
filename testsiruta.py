@@ -33,8 +33,6 @@
 
 
 """
-:mod:`testsiruta`
-====================
 Test module for sirutalib
 
 """
