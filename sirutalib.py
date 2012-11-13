@@ -100,6 +100,7 @@ class SirutaDatabase:
             40: u'județ',
         }
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
+        self._dia_trans = {ord(u"Ş"): u"Ș", ord(u"ş"): u"ș", ord(u"Ţ"): u"Ț", ord(u"ţ"): u"ț"}
         self._enforce_warnings = enforce_warnings
         self.__parse_file()
         self.__build_county_list()
@@ -135,16 +136,16 @@ class SirutaDatabase:
                 else:
                     urban = False
                 self._data[siruta] = {
-                                        'siruta':   siruta,
-                                        'name':     unicode(row[1],'utf8'),
-                                        'postcode': int(row[2]),
-                                        'county':   int(row[3]),
-                                        'sirutasup':int(row[4]),
-                                        'type':     int(row[5]),
-                                        'level':    unicode(row[6],'utf8'),
-                                        'urban':    urban,
-                                        'region':   int(row[8]),
-                                     }
+                    'siruta':   siruta,
+                    'name':     unicode(row[1],'utf8').translate(self._dia_trans),
+                    'postcode': int(row[2]),
+                    'county':   int(row[3]),
+                    'sirutasup':int(row[4]),
+                    'type':     int(row[5]),
+                    'level':    unicode(row[6],'utf8'),
+                    'urban':    urban,
+                    'region':   int(row[8]),
+                 }
         
     def __build_county_list(self):
         """
