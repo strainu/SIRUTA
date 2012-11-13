@@ -19,3 +19,10 @@ To work on the SIRUTAlib code, you only need a local repository checkout::
     $ cd siruta
 
 That's it, enjoy!
+
+Feedback and contributions
+--------------------------
+
+You can register a bug, feature request or pull request on github: https://github.com/strainu/SIRUTA/issues
+
+If you want to contact the author, you can do it by emailing ``siruta [at] strainu.ro``.
