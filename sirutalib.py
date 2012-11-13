@@ -69,10 +69,10 @@ class SirutaDatabase:
     
     :param filename: the CSV file containing the data. This is either \
     an abosulte path or a path relative to the current folder
-    :param enforceWarnings: treat warnings as exceptions
+    :param enforce_warnings: treat warnings as exceptions
     
     """
-    def __init__(self, filename="siruta.csv", enforceWarnings=False):
+    def __init__(self, filename="siruta.csv", enforce_warnings=False):
         if os.path.isabs(filename):
             self._file = filename
         else:
@@ -100,12 +100,12 @@ class SirutaDatabase:
             40: u'județ',
         }
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
-        self._enforceWarnings = enforceWarnings
+        self._enforce_warnings = enforce_warnings
         self.__parse_file()
         self.__build_county_list()
         
     def __notify_error(self, message, enforce=False):
-        if enforce or self._enforceWarnings:
+        if enforce or self._enforce_warnings:
             warnings.simplefilter("error")
         else:
             warnings.simplefilter("ignore")

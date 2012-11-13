@@ -118,12 +118,12 @@ class TestSirutaCsv(unittest.TestCase):
         #correct, but inexistent code
         name = self._csv.get_name(500)
         self.assertEqual(name, None)
-        self._csv._enforceWarnings = True
+        self._csv._enforce_warnings = True
         try:
             self.assertRaises(sirutalib.SirutaCodeWarning, 
                               self._csv.get_name, 179197)
         finally:
-            self._csv._enforceWarnings = False
+            self._csv._enforce_warnings = False
         
     def test_siruta_is_valid(self):
         self.assertTrue(self._csv.siruta_is_valid(179132))
