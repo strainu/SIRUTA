@@ -10,19 +10,45 @@ The SIRUTA archives contain detailed documentation about the whole classificatio
 
 .. note::
     This library makes the assumption that SIRUTA codes shorter than 6 characters are filled with 0 to the left in order to calculate the checksum. There are 77 codes that do not respect this assumpsion. Out of those, 76 can be calculated if the code is filled with 0's to the *right*. The remaining code is 9026.
+    
+Getting the library
+===================
 
-Development
-===========
-To work on the SIRUTAlib code, you only need a local repository checkout::
+You can either `download the tar file <http://proiecte.strainu.ro/siruta/SIRUTAlib-1.0.tar.gz>`_ or get the source code, as described in the :ref:`development-label` section.
 
-    $ git clone https://github.com/strainu/SIRUTA.git
-    $ cd siruta
+In both cases, you will also get a copy of the most recent SIRUTA database in :abbr:`CSV (Comma-Separated Values)` format.
 
-That's it, enjoy!
+.. _contact-label:
 
-Feedback and contributions
---------------------------
+Feedback and contact
+====================
 
 You can register a bug, feature request or pull request on github: https://github.com/strainu/SIRUTA/issues
 
 If you want to contact the author, you can do it by emailing ``siruta [at] strainu.ro``.
+
+.. _development-label:
+
+Development
+===========
+This library uses Git for source control. To work on the SIRUTAlib code, you only need a local repository checkout::
+
+    $ git clone https://github.com/strainu/SIRUTA.git
+    $ cd siruta
+
+You will find 2 python files:
+ * ``sirutalib.py`` contains the actual library
+ * ``testsiruta.py`` contains the tests needed to check the code.
+
+That's it, enjoy!
+
+Contributing
+------------
+
+If you plan to contribute code to SIRUTAlib, please keep a few things in mind:
+ * code should be formatted according to :pep:8
+ * tests should be written for all the new code, as long as you don't need to change class internals to test it
+ 
+Then prepare a patch and submit a pull request on `github <https://github.com/strainu/SIRUTA/issues>`_.
+
+For more contact options, see :ref:`contact-label`.
