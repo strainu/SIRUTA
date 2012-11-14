@@ -37,7 +37,7 @@ Contributing
 ------------
 
 If you plan to contribute code to SIRUTAlib, please keep a few things in mind:
- * code should be formatted according to :pep:8
+ * code should be formatted according to :pep:`8`
  * tests should be written for all the new code, as long as you don't need to change class internals to test it
  
 Then prepare a patch and submit a pull request on `github <https://github.com/strainu/SIRUTA/issues>`_.
