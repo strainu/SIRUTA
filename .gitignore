@@ -1,5 +1,6 @@
 *.pyc
 .coverage
 doc/_*
+doc/*.html
 MANIFEST
-dist/
+dist
