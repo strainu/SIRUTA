@@ -1,4 +1,6 @@
 from distutils.core import setup
+import sys
+import os
 
 setup(name='SIRUTAlib',
       version='1.0',
@@ -8,7 +10,6 @@ setup(name='SIRUTAlib',
       license='3-clause BSD',
       py_modules=['sirutalib'],
       data_files=[
-          ('.', ['siruta.csv','README.rst','INSTALL.rst']),
-          ('help', ['doc/help.html']),
+          (os.path.join(sys.prefix,'sirutalib'), ['siruta.csv','README.rst','INSTALL.rst','doc/help.html']),
           ],
       )
