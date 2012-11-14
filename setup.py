@@ -9,6 +9,6 @@ setup(name='SIRUTAlib',
       py_modules=['sirutalib'],
       data_files=[
           ('.', ['siruta.csv','README.rst','INSTALL.rst']),
-          ('doc/_build/html', ['index.html']),
+          ('help', ['doc/help.html']),
           ],
       )
