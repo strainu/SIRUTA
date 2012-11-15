@@ -14,7 +14,7 @@ The SIRUTA archives contain detailed documentation about the whole classificatio
 Getting the library
 ===================
 
-You can either `download the tar file <https://github.com/downloads/strainu/SIRUTA/SIRUTAlib-1.0.tar.gz>`_ or get the source code, as described in the :ref:`development-label` section.
+You can either `download the tar file <https://github.com/downloads/strainu/SIRUTA/SIRUTAlib-1.0.tar.gz>`_ (`mirror <http://proiecte.strainu.ro/siruta/SIRUTAlib-1.0.tar.gz>`_) or get the source code, as described in the :ref:`development-label` section.
 
 In both cases, you will also get a copy of the most recent SIRUTA database in :abbr:`CSV (Comma-Separated Values)` format.
 
@@ -22,7 +22,16 @@ In both cases, you will also get a copy of the most recent SIRUTA database in :a
 
 Development
 ===========
-This library uses Git for source control. To work on the SIRUTAlib code, you only need a local repository checkout::
+Dependencies
+------------
+ * a recent version of **python** is required in order to develop with SIRUTAlib
+ * this library uses **Git** for source control, so you'll need that if you want to get the full source code. 
+ * if you want to build the help files, you'll also need **sphinx** and **make** (the latter is optional)
+
+
+Getting the source
+------------------
+To work on the SIRUTAlib code, you only need a local repository checkout::
 
     $ git clone https://github.com/strainu/SIRUTA.git
     $ cd siruta
@@ -32,6 +41,11 @@ You will find 2 python files:
  * ``testsiruta.py`` contains the tests needed to check the code.
 
 That's it, enjoy!
+
+Using the library
+-----------------
+
+A simple usage example is available in the INSTALL file.
 
 Contributing
 ------------
