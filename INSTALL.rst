@@ -7,7 +7,10 @@ In order to install SIRUTAlib, you just need to extract the archive and run the 
     # python setup.py install
 
 
-Then, you can just import sirutalib in your program::
+Then, you can just import sirutalib in your program:
+
+::
+
     #!/usr/bin/python
     import sirutalib
 
