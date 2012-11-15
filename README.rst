@@ -1,4 +1,4 @@
-This project aims to create a library that can import a `SIRUTA <http://colectaredate.insse.ro/senin/classifications.htm?selectedClassification=&action=&classificationName=SIRUTA&classificationVersion=Versiune>`_ database and offer simple access to the different elements of the database.
+`This project <http://proiecte.strainu.ro/siruta/>`_ aims to create a library that can import a `SIRUTA <http://colectaredate.insse.ro/senin/classifications.htm?selectedClassification=&action=&classificationName=SIRUTA&classificationVersion=Versiune>`_ database and offer simple access to the different elements of the database.
 
 What is SIRUTA?
 ===============
@@ -14,7 +14,7 @@ The SIRUTA archives contain detailed documentation about the whole classificatio
 Getting the library
 ===================
 
-You can either `download the tar file <http://proiecte.strainu.ro/siruta/SIRUTAlib-1.0.tar.gz>`_ or get the source code, as described in the :ref:`development-label` section.
+You can either `download the tar file <https://github.com/downloads/strainu/SIRUTA/SIRUTAlib-1.0.tar.gz>`_ or get the source code, as described in the :ref:`development-label` section.
 
 In both cases, you will also get a copy of the most recent SIRUTA database in :abbr:`CSV (Comma-Separated Values)` format.
 
@@ -51,4 +51,4 @@ Feedback and contact
 
 You can register a bug, feature request or pull request on github: https://github.com/strainu/SIRUTA/issues
 
-If you want to contact the author, you can do it by emailing ``siruta [at] strainu.ro``.
+If you want to contact the author, you can do it by emailing ``siruta [at] strainu.ro``. All the latest information is available on `the project's page <http://proiecte.strainu.ro/siruta/>`_.
