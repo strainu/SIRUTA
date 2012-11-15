@@ -76,9 +76,15 @@ class SirutaDatabase:
         if os.path.isabs(filename):
             self._file = filename
         else:
-            self._file = os.path.join(
+            fname = os.path.join(
                             os.path.dirname(os.path.abspath(__file__)), 
                             filename)
+            if os.path.isfile(fname): #search in the directory running the lib
+                self._file = fname
+            elif os.path.isfile(filename):# search in the current directory
+                self._file = filename
+            else:
+                self.__notify_error("CSV file not found. Please set the filename parameter to a valid path relative to the current folder", enforce=True)
         self._data = {}
         self._names = {}
         self._counties = {}
@@ -126,10 +132,12 @@ class SirutaDatabase:
                 try:
                     siruta = int(row[0])
                 except ValueError as e:
+                    self.__notify_error("Line %s has an invalid SIRUTA code" % str(row))
                     continue
                 if not self.siruta_is_valid(siruta):
                     self.__notify_error("SIRUTA code %d is not valid" % siruta)
                 if len(row) <> 15:
+                    self.__notify_error("Line %s does not have 15 elements" % str(row))
                     continue
                 if row[7] == "1":
                     urban = True
