@@ -211,6 +211,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         return self._data[siruta]['name']
@@ -231,6 +232,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         return self._data[siruta]['sirutasup']
@@ -256,6 +258,7 @@ class SirutaDatabase:
             "(%d) is not valid for code %s" % (supcode,siruta))
             
         if not supcode in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % supcode)
             return None
             
         return self._data[supcode]['name']
@@ -275,6 +278,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         return self._data[siruta]['postcode']
@@ -293,6 +297,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         return self._data[siruta]['type']
@@ -312,6 +317,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         type_ = self._data[siruta]['type']
@@ -334,6 +340,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         return self._data[siruta]['county']
@@ -351,6 +358,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         county = self._data[siruta]['county']
@@ -376,6 +384,7 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not valid" % siruta)
             
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         return self._data[siruta]['region']
@@ -398,6 +407,7 @@ superior code
             
         #we could skip this check, but we don't want weird supcodes
         if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
         ret = []
