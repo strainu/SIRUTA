@@ -133,6 +133,13 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertFalse(self._csv.siruta_is_valid(86453))
         #this is an imaginary, wrong SIRUTA code
         self.assertFalse(self._csv.siruta_is_valid(179197))
+
+    def test_get_last_error(self):
+        invalid_siruta = 179197
+        self._csv.get_region(invalid_siruta)
+        err = self._csv.get_last_error()
+        myerr = "SIRUTA code %d is not in the database" % invalid_siruta
+        self.assertEqual(err, myerr)
         
     def test_get_sup_code(self):
         self.assertEqual(self._csv.get_sup_code(10), 1)

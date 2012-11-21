@@ -108,6 +108,7 @@ class SirutaDatabase:
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
         self._dia_trans = {ord(u"Ş"): u"Ș", ord(u"ş"): u"ș", ord(u"Ţ"): u"Ț", ord(u"ţ"): u"ț"}
         self._enforce_warnings = enforce_warnings
+	self._last_error = ""
         self.__parse_file()
         self.__build_county_list()
         
@@ -116,6 +117,7 @@ class SirutaDatabase:
             warnings.simplefilter("error")
         else:
             warnings.simplefilter("ignore")
+        self._last_error = message
         warnings.warn(message, SirutaCodeWarning, stacklevel=2)
         warnings.resetwarnings()
         
@@ -195,6 +197,9 @@ class SirutaDatabase:
         checksum = 11 - checksum
         checksum %= 10
         return checksum == checkdigit
+
+    def get_last_error(self):
+        return self._last_error
     
     def get_name(self, siruta):
         """Get the entity name for the given siruta code
