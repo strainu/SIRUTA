@@ -346,7 +346,9 @@ class SirutaDatabase:
             if prefix:
                 return self._counties[county]
             else:
-                return self._counties[county].replace(self._prefixes[0], "")
+                name = self._counties[county].replace(self._prefixes[0], "")
+                name = name.replace(self._prefixes[1], "")
+                return name
         else:
             return None
         
@@ -408,6 +410,7 @@ superior code
         if not prefix:
             for index in range(len(ret)):
                 ret[index] = ret[index].replace(self._prefixes[0], u"")
+                ret[index] = ret[index].replace(self._prefixes[1], u"")
         ret.sort(cmp=locale.strcoll)
         return ret
         
