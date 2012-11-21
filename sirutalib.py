@@ -207,9 +207,6 @@ class SirutaDatabase:
         :rtype: string
 
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -228,9 +225,6 @@ class SirutaDatabase:
         :rtype: string
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -253,10 +247,6 @@ class SirutaDatabase:
         if supcode == None:
             return None
         
-        if not self.siruta_is_valid(supcode):
-            self.__notify_error("The SIRUTA code of the superior entity" \
-            "(%d) is not valid for code %s" % (supcode,siruta))
-            
         if not supcode in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % supcode)
             return None
@@ -274,9 +264,6 @@ class SirutaDatabase:
         :rtype: string
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -293,9 +280,6 @@ class SirutaDatabase:
         :rtype: int
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -313,9 +297,6 @@ class SirutaDatabase:
         :rtype: string
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -336,9 +317,6 @@ class SirutaDatabase:
         :rtype: int
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -354,9 +332,6 @@ class SirutaDatabase:
         :rtype: string
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -380,9 +355,6 @@ class SirutaDatabase:
         :rtype: int
         
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
@@ -402,9 +374,6 @@ superior code
         :rtype: list
 
         """
-        if not self.siruta_is_valid(siruta):
-            self.__notify_error("SIRUTA code %d is not valid" % siruta)
-            
         #we could skip this check, but we don't want weird supcodes
         if not siruta in self._data:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
