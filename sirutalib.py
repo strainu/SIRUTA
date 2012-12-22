@@ -108,7 +108,7 @@ class SirutaDatabase:
         self._prefixes = [u"JUDEȚUL ", u"MUNICIPIUL ", u"ORAȘ ", u"BUCUREȘTI "]
         self._dia_trans = {ord(u"Ş"): u"Ș", ord(u"ş"): u"ș", ord(u"Ţ"): u"Ț", ord(u"ţ"): u"ț"}
         self._enforce_warnings = enforce_warnings
-	self._last_error = ""
+        self._last_error = ""
         self.__parse_file()
         self.__build_county_list()
         
@@ -201,11 +201,14 @@ class SirutaDatabase:
     def get_last_error(self):
         return self._last_error
     
-    def get_name(self, siruta):
+    def get_name(self, siruta, prefix=True):
         """Get the entity name for the given siruta code
         
         :param siruta: The SIRUTA code for which we want the name
         :type siruta: int
+        :param prefix: True if we want the name with entity type, \
+        False if we only want the name
+        :type prefix: bool
             
         :return: The name of the entity or None if the code is not in \
         the database
@@ -216,7 +219,13 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not in the database" % siruta)
             return None
             
-        return self._data[siruta]['name']
+        if prefix:
+            return self._data[siruta]['name']
+        else:
+            name = self._data[siruta]['name']
+            for i in range(len(self._prefixes)):
+                name = name.replace(self._prefixes[i], "")
+            return name.strip()
         
     def get_sup_code(self, siruta):
         """Get the superior entity code for the given siruta code
@@ -236,12 +245,15 @@ class SirutaDatabase:
             
         return self._data[siruta]['sirutasup']
         
-    def get_sup_name(self, siruta):
+    def get_sup_name(self, siruta, prefix=True):
         """Get the superior entity name for the given siruta code
         
         :param siruta: The SIRUTA code for which we want the name of \
         the superior entity
         :type siruta: int
+        :param prefix: True if we want the name with entity type, \
+        False if we only want the name
+        :type prefix: bool
             
         :return: The name of the superior entity or ``None`` if the \
         code is not in the database
@@ -256,7 +268,13 @@ class SirutaDatabase:
             self.__notify_error("SIRUTA code %d is not in the database" % supcode)
             return None
             
-        return self._data[supcode]['name']
+        if prefix:
+            return self._data[supcode]['name']
+        else:
+            name = self._data[supcode]['name']
+            for i in range(len(self._prefixes)):
+                name = name.replace(self._prefixes[i], "")
+            return name.strip()
         
     def get_postal_code(self, siruta):
         """Get the entity's postal code for the given siruta code

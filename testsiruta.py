@@ -113,6 +113,8 @@ class TestSirutaCsv(unittest.TestCase):
         import sirutalib
         name = self._csv.get_name(10)
         self.assertEqual(name, u"JUDEȚUL ALBA")
+        name = self._csv.get_name(10, prefix=False)
+        self.assertEqual(name, u"ALBA")
         name = self._csv.get_name(179196)
         self.assertEqual(name, u"BUCUREȘTI SECTORUL 6")
         #correct, but inexistent code
@@ -150,6 +152,8 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(self._csv.get_sup_name(10), None)
         self.assertEqual(self._csv.get_sup_name(1017), 
                          u"JUDEȚUL ALBA")
+        self.assertEqual(self._csv.get_sup_name(1017, prefix=False), 
+                         u"ALBA")
         #this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_sup_name(179197), None)
         
@@ -223,7 +227,7 @@ class TestSirutaCsv(unittest.TestCase):
     def test_get_all_counties(self):
         self.maxDiff = None
         
-        county_names_without_prefix = county_names + [u"MUNICIPIUL BUCUREȘTI"]
+        county_names_without_prefix = county_names + [u"BUCUREȘTI"]
         self.assertItemsEqual(self._csv.get_all_counties(prefix=False), county_names_without_prefix)
         
         county_names_with_prefix = map(operator.add, [u"JUDEȚUL "]*len(county_names), county_names)
