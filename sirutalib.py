@@ -282,8 +282,9 @@ class SirutaDatabase:
         :param siruta: The SIRUTA code for which we want the postal code
         :type siruta: int
             
-        :return: The postal code of the entity or ``None`` if the SIRUTA\
-        code is not in the database
+        :return: The postal code of the entity, ``None`` if the SIRUTA\
+        code is not in the database or ``0`` if the entity has more than\
+        one postal code
         :rtype: string
         
         """
