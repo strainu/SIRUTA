@@ -167,6 +167,35 @@ class SirutaDatabase:
         for entry in self._data.values():
             if entry['type'] == 40:
                 self._counties[entry['county']] = entry['name']
+                
+    def get_siruta_list(self, county_list=None, type_list=None):
+        """
+        Get a list of SIRUTA codes for entities matching the limitations
+        imposed by both the ``county`` and ``type`` parameters
+        
+        :param county_list: List of counties for which we want the codes
+        :type county_list: list
+        :param type_list: List of types for which we want the codes
+        :type type_list: list
+            
+        :return: List of codes matching the limitations or an empty list
+        :rtype: list
+        
+        """
+        ret = []
+        if county_list <> None and type(county_list) <> list:
+            self.__notify_error("Invalid county required")
+            return ret
+        if type_list <> None and type(type_list) <> list:
+            self.__notify_error("Invalid type required")
+            return ret
+            
+        for entry in self._data.values():
+            if (county_list == None or entry['county'] in county_list) and\
+                (type_list == None or entry['type'] in type_list):
+                ret.append(entry['siruta'])
+        
+        return ret
         
     def siruta_is_valid(self, siruta):
         """

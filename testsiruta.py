@@ -233,6 +233,18 @@ class TestSirutaCsv(unittest.TestCase):
         county_names_with_prefix = map(operator.add, [u"JUDEȚUL "]*len(county_names), county_names)
         county_names_with_prefix.append(u"MUNICIPIUL BUCUREȘTI")
         self.assertItemsEqual(self._csv.get_all_counties(prefix=True), county_names_with_prefix)
+        
+    def test_get_siruta_list(self):
+        import sirutalib
+        self._csv._enforce_warnings = True
+        try:
+            self.assertRaises(sirutalib.SirutaCodeWarning, 
+                              self._csv.get_siruta_list, 1, None)
+            self.assertRaises(sirutalib.SirutaCodeWarning, 
+                              self._csv.get_siruta_list, None, 1)
+        finally:
+            self._csv._enforce_warnings = False
+        self.assertEqual(self._csv.get_siruta_list([1,3,5], [1]), [1017, 13169, 26564])
     
     
 if __name__ == '__main__':
