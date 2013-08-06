@@ -37,9 +37,12 @@ Test module for sirutalib
 
 """
 
+import sys
 import unittest
 import mmap
-import operator
+
+
+PY2 = sys.version_info[0] < 3
 
 
 county_names = [
@@ -89,6 +92,9 @@ county_names = [
 
 class TestSirutaCsv(unittest.TestCase):
     _csv = None
+    
+    if not PY2:
+        assertItemsEqual = unittest.TestCase.assertCountEqual
     
     def setUp(self):
         import sirutalib
@@ -230,7 +236,7 @@ class TestSirutaCsv(unittest.TestCase):
         county_names_without_prefix = county_names + [u"BUCUREȘTI"]
         self.assertItemsEqual(self._csv.get_all_counties(prefix=False), county_names_without_prefix)
         
-        county_names_with_prefix = map(operator.add, [u"JUDEȚUL "]*len(county_names), county_names)
+        county_names_with_prefix = [u"JUDEȚUL " + name for name in county_names]
         county_names_with_prefix.append(u"MUNICIPIUL BUCUREȘTI")
         self.assertItemsEqual(self._csv.get_all_counties(prefix=True), county_names_with_prefix)
     
