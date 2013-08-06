@@ -109,6 +109,7 @@ class TestSirutaCsv(unittest.TestCase):
         while readline():
             lines += 1
         self.assertEqual(lines - 1, len(self._csv._data))
+        f.close()
         
     def test_county_name(self):
         self.assertEqual(u"JUDEȚUL ALBA", self._csv._counties[1])
