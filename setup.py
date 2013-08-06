@@ -10,7 +10,7 @@ class custom_install_data(distutils.command.install_data.install_data):
     def run(self):
         install_cmd = self.get_finalized_command('install')
         self.install_dir = getattr(install_cmd, 'install_lib')
-	self.data_files = [('',['siruta.csv'])]
+        self.data_files = [('',['siruta.csv'])]
         return distutils.command.install_data.install_data.run(self)
 
 
