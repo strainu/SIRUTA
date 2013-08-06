@@ -4,3 +4,4 @@ doc/_*
 doc/*.html
 MANIFEST
 dist
+*.egg-info
