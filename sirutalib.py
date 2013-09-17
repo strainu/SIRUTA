@@ -77,6 +77,12 @@ class SirutaDatabase:
     :param enforce_warnings: treat warnings as exceptions
     
     """
+    _DIA_NEUTRAL = 0x0
+    _DIA_PRE93 =   0x1
+    _DIA_POST93 =  0x2
+    _DIA_CEDILLA = 0x4
+    _DIA_COMMA =   0x8
+
     def __init__(self, filename="siruta.csv", enforce_warnings=False):
         if os.path.isabs(filename):
             self._file = filename
@@ -114,8 +120,10 @@ class SirutaDatabase:
         self._dia_trans = {ord(u"Ş"): u"Ș", ord(u"ş"): u"ș", ord(u"Ţ"): u"Ț", ord(u"ţ"): u"ț"}
         self._enforce_warnings = enforce_warnings
         self._last_error = ""
+        self._dia = self._DIA_NEUTRAL
         self.__parse_file()
         self.__build_county_list()
+	
         
     def __notify_error(self, message, enforce=False):
         if enforce or self._enforce_warnings:
@@ -206,6 +214,27 @@ class SirutaDatabase:
                 ret.append(entry['siruta'])
         
         return ret
+
+    def __normalize_string(self, string):
+        """
+        Return a string formatting according to the current
+        diacritics settings
+        """
+        if self._dia & self._DIA_PRE93:
+            string = string.replace(u"Â", u"Î")
+            string = string.replace(u"ROMÎNĂ", u"ROMÂNĂ")
+	elif self._dia & self._DIA_POST93:
+            string = string.replace(u"Î", u"Â")
+            string = string.replace(u"Ă ", u"Î")
+
+        if self._dia & self._DIA_CEDILLA:
+            string = string.replace(u"Ș", u"Ş")
+            string = string.replace(u"Ț", u"Ţ")
+        elif self._dia & self._DIA_COMMA:
+            string = string.replace(u"Ş", u"Ș")
+            string = string.replace(u"Ţ", u"Ț")
+
+        return string
         
     def siruta_is_valid(self, siruta):
         """
@@ -239,6 +268,33 @@ class SirutaDatabase:
 
     def get_last_error(self):
         return self._last_error
+
+    def set_diacritics_params(self, cedilla=False, acircumflex=True):
+	"""Choose wether to return diacritics with cedilla or \
+        comma and with â or î
+
+        :param cedilla: True if we should return diacritics with cedillas, \
+        False if we should return diacritics with comma-below
+        :type cedilla: bool
+        :param acircumflex: True if we are to return names with Â, \
+        False if names with Î are required
+        :type acircumflex: bool
+        """
+        self.reset_diacritics_params()
+        if cedilla == True:
+            self._dia = self._dia | self._DIA_CEDILLA
+        else:
+            self._dia = self._dia | self._DIA_COMMA
+
+        if acircumflex == True:
+            self._dia = self._dia | self._DIA_POST93
+        else:
+            self._dia = self._dia | self._DIA_PRE93
+
+    def reset_diacritics_params(self):
+        """Reset the parameters for diacritics to the default \
+        values (i.e. what we have in the file)"""
+        self._dia = self._DIA_NEUTRAL
     
     def get_name(self, siruta, prefix=True):
         """Get the entity name for the given siruta code
@@ -259,12 +315,12 @@ class SirutaDatabase:
             return None
             
         if prefix:
-            return self._data[siruta]['name']
+            return self.__normalize_string(self._data[siruta]['name'])
         else:
             name = self._data[siruta]['name']
             for i in range(len(self._prefixes)):
                 name = name.replace(self._prefixes[i], "")
-            return name.strip()
+            return self.__normalize_string(name.strip())
         
     def get_sup_code(self, siruta):
         """Get the superior entity code for the given siruta code
@@ -313,7 +369,7 @@ class SirutaDatabase:
             name = self._data[supcode]['name']
             for i in range(len(self._prefixes)):
                 name = name.replace(self._prefixes[i], "")
-            return name.strip()
+            return self.__normalize_string(name.strip())
         
     def get_postal_code(self, siruta):
         """Get the entity's postal code for the given siruta code
@@ -366,7 +422,7 @@ class SirutaDatabase:
             
         type_ = self._data[siruta]['type']
         if type_ in self._village_type:
-            return self._village_type[type_]
+            return self.__normalize_string(self._village_type[type_])
         else:
             return None
         
@@ -402,11 +458,11 @@ class SirutaDatabase:
         county = self._data[siruta]['county']
         if county in self._counties:
             if prefix:
-                return self._counties[county]
+                return self.__normalize_string(self._counties[county])
             else:
                 name = self._counties[county].replace(self._prefixes[0], "")
                 name = name.replace(self._prefixes[1], "")
-                return name
+                return self.__normalize_string(name)
         else:
             return None
         
@@ -469,6 +525,7 @@ superior code
             for index in range(len(ret)):
                 ret[index] = ret[index].replace(self._prefixes[0], u"")
                 ret[index] = ret[index].replace(self._prefixes[1], u"")
+                ret[index] = self.__normalize_string(ret[index])
         if PY2:
             ret.sort(cmp=locale.strcoll)
         else:

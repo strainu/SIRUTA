@@ -255,7 +255,21 @@ class TestSirutaCsv(unittest.TestCase):
         finally:
             self._csv._enforce_warnings = False
         self.assertEqual(self._csv.get_siruta_list([1,3,5], [1]), [1017, 13169, 26564])
-    
+
+    def test_diacritics_variations(self):
+        self._csv.set_diacritics_params(cedilla=True, acircumflex=False)
+        self.assertEqual(self._csv.get_county_string(179132), 
+                         u"MUNICIPIUL BUCUREŞTI")
+        self.assertEqual(self._csv.get_county_string(86453), 
+                         u"JUDEŢUL HARGHITA")
+        self.assertEqual(self._csv.get_county_string(179197), None)
+	self.assertEqual(self._csv.get_name(178849),
+                         u"BOŢÎRLĂU")
+        self._csv.set_diacritics_params(cedilla=False, acircumflex=True)
+	self.assertEqual(self._csv.get_name(178849),
+                         u"BOȚÂRLĂU")
+        self._csv.reset_diacritics_params()
+
     
 if __name__ == '__main__':
     unittest.main()
