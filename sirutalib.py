@@ -41,6 +41,11 @@ import csv
 import locale
 import warnings
 import os
+import sys
+
+
+PY2 = sys.version_info[0] < 3
+
 
 class SirutaCodeWarning(UserWarning):
     """
@@ -128,7 +133,12 @@ class SirutaDatabase:
         The output format is: TODO
         
         """
-        with open(self._file, 'rb') as csvfile:
+
+        if PY2:
+            text = lambda v: v.decode('utf-8')
+        else:
+            text = lambda v: v
+        with open(self._file, 'r') as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
             for row in reader:
                 try:
@@ -138,7 +148,7 @@ class SirutaDatabase:
                     continue
                 if not self.siruta_is_valid(siruta):
                     self.__notify_error("SIRUTA code %d is not valid" % siruta)
-                if len(row) <> 15:
+                if len(row) != 15:
                     self.__notify_error("Line %s does not have 15 elements" % str(row))
                     continue
                 if row[7] == "1":
@@ -147,12 +157,12 @@ class SirutaDatabase:
                     urban = False
                 self._data[siruta] = {
                     'siruta':   siruta,
-                    'name':     unicode(row[1],'utf8').translate(self._dia_trans),
+                    'name':     text(row[1]).translate(self._dia_trans),
                     'postcode': int(row[2]),
                     'county':   int(row[3]),
                     'sirutasup':int(row[4]),
                     'type':     int(row[5]),
-                    'level':    unicode(row[6],'utf8'),
+                    'level':    text(row[6]),
                     'urban':    urban,
                     'region':   int(row[8]),
                  }
@@ -209,7 +219,7 @@ class SirutaDatabase:
         :rtype: bool
         
         """
-        if type(siruta) <> int:
+        if type(siruta) != int:
             siruta = int(siruta)
         if len(str(siruta)) > 6:
             return False
@@ -218,7 +228,7 @@ class SirutaDatabase:
         checkdigit = siruta % 10
         index = 0
         while (index < 5):
-            siruta /= 10
+            siruta = int(siruta / 10)
             left = (siruta % 10) * weights[index]
             checksum += sum(map(int,str(left))) # sum of digits of left
             index += 1
@@ -454,12 +464,15 @@ superior code
         """
         # this reads the environment and inits the right locale
         locale.setlocale(locale.LC_ALL, "")
-        ret = self._counties.values()
+        ret = list(self._counties.values())
         if not prefix:
             for index in range(len(ret)):
                 ret[index] = ret[index].replace(self._prefixes[0], u"")
                 ret[index] = ret[index].replace(self._prefixes[1], u"")
-        ret.sort(cmp=locale.strcoll)
+        if PY2:
+            ret.sort(cmp=locale.strcoll)
+        else:
+            ret.sort(key=locale.strxfrm)
         return ret
         
     def get_code_by_name(self, name):
