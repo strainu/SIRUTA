@@ -78,10 +78,11 @@ class SirutaDatabase:
     
     """
     _DIA_NEUTRAL = 0x0
-    _DIA_PRE93 =   0x1
-    _DIA_POST93 =  0x2
+    _DIA_PRE93   = 0x1
+    _DIA_POST93  = 0x2
     _DIA_CEDILLA = 0x4
-    _DIA_COMMA =   0x8
+    _DIA_COMMA   = 0x8
+    _DIA_NONE    = 0x10
 
     def __init__(self, filename="siruta.csv", enforce_warnings=False):
         if os.path.isabs(filename):
@@ -220,6 +221,7 @@ class SirutaDatabase:
         Return a string formatting according to the current
         diacritics settings
         """
+
         if self._dia & self._DIA_PRE93:
             string = string.replace(u"Â", u"Î")
             string = string.replace(u"ROMÎNĂ", u"ROMÂNĂ")
@@ -233,6 +235,13 @@ class SirutaDatabase:
         elif self._dia & self._DIA_COMMA:
             string = string.replace(u"Ş", u"Ș")
             string = string.replace(u"Ţ", u"Ț")
+
+	if self._dia & self._DIA_NONE:
+            string = string.replace(u"Î", u"I")
+            string = string.replace(u"Â", u"A")
+            string = string.replace(u"Ă", u"A")
+            string = string.replace(u"Ș", u"S")
+            string = string.replace(u"Ț", u"T")
 
         return string
         
@@ -269,7 +278,7 @@ class SirutaDatabase:
     def get_last_error(self):
         return self._last_error
 
-    def set_diacritics_params(self, cedilla=False, acircumflex=True):
+    def set_diacritics_params(self, cedilla=False, acircumflex=True, nodia=False):
 	"""Choose wether to return diacritics with cedilla or \
         comma and with â or î
 
@@ -279,8 +288,13 @@ class SirutaDatabase:
         :param acircumflex: True if we are to return names with Â, \
         False if names with Î are required
         :type acircumflex: bool
+	:param nodia: True if diacritics should be stripped, False otherwise
+	:type nodia: bool
         """
         self.reset_diacritics_params()
+	if nodia == True:
+            self._dia = self._dia | self._DIA_NONE
+
         if cedilla == True:
             self._dia = self._dia | self._DIA_CEDILLA
         else:
@@ -364,7 +378,7 @@ class SirutaDatabase:
             return None
             
         if prefix:
-            return self._data[supcode]['name']
+            return self.__normalize_string(self._data[supcode]['name'])
         else:
             name = self._data[supcode]['name']
             for i in range(len(self._prefixes)):
