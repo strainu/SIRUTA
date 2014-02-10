@@ -9,7 +9,7 @@ It gives every entity a 6 digit code (5-digit unique code and 1-digit checksum).
 The SIRUTA archives contain detailed documentation about the whole classification, including the algoritm for the checksum. 
 
 .. note::
-    This library makes the assumption that SIRUTA codes shorter than 6 characters are filled with 0 to the left in order to calculate the checksum. There are 77 codes that do not respect this assumpsion. Out of those, 76 can be calculated if the code is filled with 0's to the *right*. The remaining code is 9026.
+    This library makes the assumption that SIRUTA codes shorter than 6 characters are filled with 0 to the left in order to calculate the checksum. There are 77 codes that do not respect this assumption. Out of those, 76 can be calculated if the code is filled with 0's to the *right*. The remaining code is 9026.
     
 Getting the library
 ===================
