@@ -254,7 +254,10 @@ class TestSirutaCsv(unittest.TestCase):
                               self._csv.get_siruta_list, None, 1)
         finally:
             self._csv._enforce_warnings = False
+
         self.assertEqual(self._csv.get_siruta_list([1,3,5], [1]), [1017, 13169, 26564])
+        self.assertEqual(self._csv.get_siruta_list(None, 1), [])
+        self.assertEqual(self._csv.get_siruta_list(1, None), [])
 
     def test_diacritics_variations(self):
         self._csv.set_diacritics_params(cedilla=True, acircumflex=False)
@@ -268,7 +271,21 @@ class TestSirutaCsv(unittest.TestCase):
         self._csv.set_diacritics_params(cedilla=False, acircumflex=True)
 	self.assertEqual(self._csv.get_name(178849),
                          u"BOȚÂRLĂU")
+        self._csv.set_diacritics_params(cedilla=False, acircumflex=True, nodia=True)
+	self.assertEqual(self._csv.get_name(178849),
+                         u"BOTARLAU")
         self._csv.reset_diacritics_params()
+
+    def test_database_search(self):
+        import sirutalib
+        import os
+        csv = sirutalib.SirutaDatabase(filename=os.path.abspath("siruta.csv"))
+	self.assertEqual(csv._file, os.path.abspath("siruta.csv"))
+	try:
+            self.assertRaises(sirutalib.SirutaCodeWarning,
+                                 sirutalib.SirutaDatabase, "nonexistent.csv")
+        finally:
+            pass
 
     
 if __name__ == '__main__':
