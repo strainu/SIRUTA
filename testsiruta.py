@@ -193,7 +193,7 @@ class TestSirutaCsv(unittest.TestCase):
     def test_get_county_string(self):
         self.assertEqual(self._csv.get_county_string(179132), 
                          u"MUNICIPIUL BUCUREȘTI")
-        self.assertEqual(self._csv.get_county_string(86453), 
+        self.assertEqual(self._csv.get_county_name(86453), 
                          u"JUDEȚUL HARGHITA")
         self.assertEqual(self._csv.get_county_string(86453, prefix=False), 
                          u"HARGHITA")

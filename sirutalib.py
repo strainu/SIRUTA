@@ -479,6 +479,17 @@ class SirutaDatabase:
                 return self.__normalize_string(name)
         else:
             return None
+
+    def get_county_name(self, siruta, prefix=True):
+        """Alias of ``get_county_string``
+
+        :param siruta: The SIRUTA code for which we want the county
+        :type siruta: int
+
+        :rtype: string
+
+        """
+        return self.get_county_string(siruta, prefix)
         
     def get_region(self, siruta):
         """Get the entity's region for the given siruta code
