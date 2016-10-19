@@ -14,7 +14,7 @@ The SIRUTA archives contain detailed documentation about the whole classificatio
 Getting the library
 ===================
 
-You can either `download the tar file <https://github.com/downloads/strainu/SIRUTA/SIRUTAlib-1.1.tar.gz>`_ (`mirror <http://proiecte.strainu.ro/siruta/SIRUTAlib-1.1.tar.gz>`_) or get the source code, as described in the :ref:`development-label` section.
+You can either `download the tar file <https://github.com/strainu/SIRUTA/releases/download/v1.1/SIRUTAlib-1.1.tar.gz>`_ (`mirror <http://proiecte.strainu.ro/siruta/SIRUTAlib-1.1.tar.gz>`_) or get the source code, as described in the :ref:`development-label` section.
 
 In both cases, you will also get a copy of the most recent SIRUTA database in :abbr:`CSV (Comma-Separated Values)` format.
 
