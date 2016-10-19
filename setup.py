@@ -15,7 +15,7 @@ class custom_install_data(distutils.command.install_data.install_data):
 
 
 setup(name='SIRUTAlib',
-      version='1.0',
+      version='1.1',
       author='Andrei Cipu',
       author_email='siruta@strainu.ro',
       url='http://proiecte.strainu.ro/siruta/',
