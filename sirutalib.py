@@ -101,14 +101,14 @@ class SirutaDatabase:
         self._names = {}
         self._counties = {}
         self._regions = {
-            1:	u'Nord-Est',
-            2:	u'Sud-Est',
-            3:	u'Sud - Muntenia',
-            4:	u'Sud-Vest - Oltenia',
-            5:	u'Vest',
-            6:	u'Nord-Vest',
-            7:	u'Centru',
-            8:	u'București-Ilfov',
+            1:  u'Nord-Est',
+            2:  u'Sud-Est',
+            3:  u'Sud - Muntenia',
+            4:  u'Sud-Vest - Oltenia',
+            5:  u'Vest',
+            6:  u'Nord-Vest',
+            7:  u'Centru',
+            8:  u'București-Ilfov',
         }
         self._village_type = {
             1:  u'municipiu reședință de județ',
@@ -134,7 +134,7 @@ class SirutaDatabase:
         self._dia = self._DIA_NEUTRAL
         self.__parse_file()
         self.__build_county_list()
-	
+
         
     def __notify_error(self, message, enforce=False):
         if enforce or self._enforce_warnings:
@@ -235,7 +235,7 @@ class SirutaDatabase:
         if self._dia & self._DIA_PRE93:
             string = string.replace(u"Â", u"Î")
             string = string.replace(u"ROMÎNĂ", u"ROMÂNĂ")
-	elif self._dia & self._DIA_POST93:
+        elif self._dia & self._DIA_POST93:
             string = string.replace(u"Î", u"Â")
             string = string.replace(u"Ă ", u"Î")
 
@@ -246,7 +246,7 @@ class SirutaDatabase:
             string = string.replace(u"Ş", u"Ș")
             string = string.replace(u"Ţ", u"Ț")
 
-	if self._dia & self._DIA_NONE:
+        if self._dia & self._DIA_NONE:
             string = string.replace(u"Î", u"I")
             string = string.replace(u"Â", u"A")
             string = string.replace(u"Ă", u"A")
@@ -289,7 +289,7 @@ class SirutaDatabase:
         return self._last_error
 
     def set_diacritics_params(self, cedilla=False, acircumflex=True, nodia=False):
-	"""Choose wether to return diacritics with cedilla or \
+        """Choose wether to return diacritics with cedilla or \
         comma and with â or î
 
         :param cedilla: True if we should return diacritics with cedillas, \
@@ -298,11 +298,11 @@ class SirutaDatabase:
         :param acircumflex: True if we are to return names with Â, \
         False if names with Î are required
         :type acircumflex: bool
-	:param nodia: True if diacritics should be stripped, False otherwise
-	:type nodia: bool
+        :param nodia: True if diacritics should be stripped, False otherwise
+        :type nodia: bool
         """
         self.reset_diacritics_params()
-	if nodia == True:
+        if nodia == True:
             self._dia = self._dia | self._DIA_NONE
 
         if cedilla == True:
@@ -552,7 +552,7 @@ class SirutaDatabase:
         
     def get_inf_codes(self, siruta):
         """Get all the entities that have the given siruta code as \
-superior code
+        superior code
         
         :param siruta: The SIRUTA code for which we want the codes of \
         the inferior entities

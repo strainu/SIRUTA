@@ -272,13 +272,13 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(self._csv.get_county_string(86453), 
                          u"JUDEŢUL HARGHITA")
         self.assertEqual(self._csv.get_county_string(179197), None)
-	self.assertEqual(self._csv.get_name(178849),
+        self.assertEqual(self._csv.get_name(178849),
                          u"BOŢÎRLĂU")
         self._csv.set_diacritics_params(cedilla=False, acircumflex=True)
-	self.assertEqual(self._csv.get_name(178849),
+        self.assertEqual(self._csv.get_name(178849),
                          u"BOȚÂRLĂU")
         self._csv.set_diacritics_params(cedilla=False, acircumflex=True, nodia=True)
-	self.assertEqual(self._csv.get_name(178849),
+        self.assertEqual(self._csv.get_name(178849),
                          u"BOTARLAU")
         self._csv.reset_diacritics_params()
 
@@ -286,8 +286,8 @@ class TestSirutaCsv(unittest.TestCase):
         import sirutalib
         import os
         csv = sirutalib.SirutaDatabase(filename=os.path.abspath("siruta.csv"))
-	self.assertEqual(csv._file, os.path.abspath("siruta.csv"))
-	try:
+        self.assertEqual(csv._file, os.path.abspath("siruta.csv"))
+        try:
             self.assertRaises(sirutalib.SirutaCodeWarning,
                                  sirutalib.SirutaDatabase, "nonexistent.csv")
         finally:
