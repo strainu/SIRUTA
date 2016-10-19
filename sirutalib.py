@@ -212,10 +212,10 @@ class SirutaDatabase:
         
         """
         ret = []
-        if county_list <> None and type(county_list) <> list:
+        if county_list != None and type(county_list) != list:
             self.__notify_error("Invalid county required")
             return ret
-        if type_list <> None and type(type_list) <> list:
+        if type_list != None and type(type_list) != list:
             self.__notify_error("Invalid type required")
             return ret
             
