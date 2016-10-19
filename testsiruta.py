@@ -33,7 +33,7 @@
 
 
 """
-Test module for sirutalib
+Test module for sirutalib.
 
 """
 
