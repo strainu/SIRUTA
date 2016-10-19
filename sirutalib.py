@@ -100,6 +100,16 @@ class SirutaDatabase:
         self._data = {}
         self._names = {}
         self._counties = {}
+        self._regions = {
+            1:	u'Nord-Est',
+            2:	u'Sud-Est',
+            3:	u'Sud - Muntenia',
+            4:	u'Sud-Vest - Oltenia',
+            5:	u'Vest',
+            6:	u'Nord-Vest',
+            7:	u'Centru',
+            8:	u'București-Ilfov',
+        }
         self._village_type = {
             1:  u'municipiu reședință de județ',
             2:  u'oraș ce aparține de județ',
@@ -506,6 +516,39 @@ class SirutaDatabase:
             return None
             
         return self._data[siruta]['region']
+
+    def get_region_string(self, siruta):
+        """Get the entity's region for the given code as string
+
+        :param siruta: The SIRUTA code for which we want the region
+        :type siruta: int
+
+        :return: the region name if available, ``None`` otherwise
+        :rtype: int
+
+        """
+        if not siruta in self._data:
+            self.__notify_error("SIRUTA code %d is not in the database" % siruta)
+            return None
+
+        region = self._data[siruta]['region']
+        if region in self._regions:
+            return self._regions[region]
+        else:
+            return None
+
+    def get_region_name(self, siruta):
+        """Alias of ``get_region_string``
+
+        :param siruta: The SIRUTA code for which we want the region
+        :type siruta: int
+
+        :return: the region name if available, ``None`` otherwise
+        :rtype: int
+
+        """
+        return self.get_region_string(siruta)
+
         
     def get_inf_codes(self, siruta):
         """Get all the entities that have the given siruta code as \

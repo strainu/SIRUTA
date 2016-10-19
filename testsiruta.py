@@ -204,6 +204,12 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(self._csv.get_region(86453), 7)
         #this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_region(179197), None)
+
+    def test_get_region_string(self):
+        self.assertEqual(self._csv.get_region_string(179132), u"București-Ilfov")
+        self.assertEqual(self._csv.get_region_name(86453), u"Centru")
+        #this is an imaginary, wrong SIRUTA code
+        self.assertEqual(self._csv.get_region_string(179197), None)
         
     def test_get_code_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
