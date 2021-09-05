@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8  -*-
 
-#  Copyright (c) 2012, Andrei Cipu <strainu@strainu.ro>
+#  Copyright (c) 2012-2021, Andrei Cipu <strainu@strainu.ro>
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,7 @@ to the resulting database
 
 """
 
+import collections
 import csv
 import locale
 import warnings
@@ -70,7 +71,7 @@ class SirutaDatabase:
     It reads data from a CSV file. The expected input format is: 
     SIRUTA;DENLOC;CODP;JUD;SIRSUP;TIP;NIV;MED;REGIUNE;FSJ;FS2;FS3;FSL;rang;fictiv
     
-    Documentation for these fiels can be found on the INSSE website.
+    Documentation for these fields can be found on the INSSE website.
     
     :param filename: the CSV file containing the data. This is either \
     an abosulte path or a path relative to the current folder
@@ -97,7 +98,7 @@ class SirutaDatabase:
                 self._file = filename
             else:
                 self.__notify_error("CSV file not found. Please set the filename parameter to a valid path relative to the current folder", enforce=True)
-        self._data = {}
+        self._data =  collections.OrderedDict({})
         self._names = {}
         self._counties = {}
         self._regions = {
@@ -237,7 +238,7 @@ class SirutaDatabase:
             string = string.replace(u"ROMÎNĂ", u"ROMÂNĂ")
         elif self._dia & self._DIA_POST93:
             string = string.replace(u"Î", u"Â")
-            string = string.replace(u"Ă ", u"Î")
+            string = string.replace(u"Â ", u"Î")
 
         if self._dia & self._DIA_CEDILLA:
             string = string.replace(u"Ș", u"Ş")
@@ -269,7 +270,7 @@ class SirutaDatabase:
         """
         if type(siruta) != int:
             siruta = int(siruta)
-        if len(str(siruta)) > 6:
+        if siruta >= 10**6:
             return False
         weights = [1, 2, 3, 5, 7]
         checksum = 0
