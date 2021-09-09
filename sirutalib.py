@@ -186,7 +186,7 @@ class SirutaDatabase:
                     'urban':    urban,
                     'region':   int(row[8]),
                  }
-        
+
     def __build_county_list(self):
         """
         Build a dictionary of counties. 
@@ -198,7 +198,7 @@ class SirutaDatabase:
             if entry['type'] == 40:
                 self._counties[entry['county']] = entry['name']
                 
-    def get_siruta_list(self, county_list=None, type_list=None):
+    def get_siruta_list(self, county_list=None, type_list=None, name=None, add_prefix=False):
         """
         Get a list of SIRUTA codes for entities matching the limitations
         imposed by both the ``county`` and ``type`` parameters
@@ -207,6 +207,10 @@ class SirutaDatabase:
         :type county_list: list
         :param type_list: List of types for which we want the codes
         :type type_list: list
+        :param name: The name of the entity to get
+        :type name: string
+        :param add_prefix: Also check for match with name prefixes
+        :type add_prefix: bool
             
         :return: List of codes matching the limitations or an empty list
         :rtype: list
@@ -219,12 +223,25 @@ class SirutaDatabase:
         if type_list != None and type(type_list) != list:
             self.__notify_error("Invalid type required")
             return ret
-            
+        if name != None and type(name) != str:
+            self.__notify_error("Invalid name required")
+            return ret
+
+        if name != None:
+            name = name.upper()
+
+        import 	time
+
         for entry in self._data.values():
             if (county_list == None or entry['county'] in county_list) and\
                 (type_list == None or entry['type'] in type_list):
-                ret.append(entry['siruta'])
-        
+                if (name == None or entry['name'] == name):
+                    ret.append(entry['siruta'])
+                elif add_prefix:
+                    idx = entry['name'].find(name)
+                    if idx > 0 and entry['name'][:idx] in self._prefixes:
+                        ret.append(entry['siruta'])
+
         return ret
 
     def __normalize_string(self, string):

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8  -*-
 
-# Copyright (c) 2012, Andrei Cipu <strainu@strainu.ro>
+# Copyright (c) 2012-2021, Andrei Cipu <strainu@strainu.ro>
 # All rights reserved.
 
 #  Redistribution and use in source and binary forms, with or without
@@ -264,6 +264,10 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(self._csv.get_siruta_list([1,3,5], [1]), [1017, 13169, 26564])
         self.assertEqual(self._csv.get_siruta_list(None, 1), [])
         self.assertEqual(self._csv.get_siruta_list(1, None), [])
+        self.assertEqual(self._csv.get_siruta_list(None, None, "VADU LAT"), [101430])
+        self.assertEqual(self._csv.get_siruta_list([32], None, "SIBIU", False), [143469])
+        self.assertEqual(self._csv.get_siruta_list([32], None, "SIBIU", True), [323, 143450, 143469])
+        self.assertEqual(self._csv.get_siruta_list([32], None, "MUNICIPIUL SIBIU"), [143450])
 
     def test_diacritics_variations(self):
         self._csv.set_diacritics_params(cedilla=True, acircumflex=False)
