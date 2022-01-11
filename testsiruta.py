@@ -7,7 +7,7 @@
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions are
 #  met:
-#  
+#
 #  * Redistributions of source code must retain the above copyright
 #    notice, this list of conditions and the following disclaimer.
 #  * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
 #  * Neither the name of the  nor the names of its
 #    contributors may be used to endorse or promote products derived from
 #    this software without specific prior written permission.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 #  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 #  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -29,7 +29,7 @@
 #  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#  
+#
 
 
 """
@@ -95,15 +95,15 @@ county_names = [
 
 class TestSirutaCsv(unittest.TestCase):
     _csv = None
-    
+
     if not PY2:
         assertItemsEqual = unittest.TestCase.assertCountEqual
-    
+
     def setUp(self):
         import sirutalib
         if TestSirutaCsv._csv is None:
             TestSirutaCsv._csv = sirutalib.SirutaDatabase()
-        
+
     def test_db_size(self):
         f = open(self._csv._file, "r+")
         buf = mmap.mmap(f.fileno(), 0)
@@ -113,12 +113,12 @@ class TestSirutaCsv(unittest.TestCase):
             lines += 1
         self.assertEqual(lines - 1, len(self._csv._data))
         f.close()
-        
+
     def test_county_name(self):
         self.assertEqual(u"JUDEȚUL ALBA", self._csv._counties[1])
         self.assertEqual(u"JUDEȚUL ARAD", self._csv._counties[2])
         self.assertEqual(u"JUDEȚUL ARGEȘ", self._csv._counties[3])
-        
+
     def test_get_name(self):
         import sirutalib
         name = self._csv.get_name(10)
@@ -127,23 +127,23 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(name, u"ALBA")
         name = self._csv.get_name(179196)
         self.assertEqual(name, u"BUCUREȘTI SECTORUL 6")
-        #correct, but inexistent code
+        # correct, but inexistent code
         name = self._csv.get_name(500)
         self.assertEqual(name, None)
         self._csv._enforce_warnings = True
         try:
-            self.assertRaises(sirutalib.SirutaCodeWarning, 
+            self.assertRaises(sirutalib.SirutaCodeWarning,
                               self._csv.get_name, 179197)
         finally:
             self._csv._enforce_warnings = False
-        
+
     def test_siruta_is_valid(self):
         self.assertTrue(self._csv.siruta_is_valid(179132))
         self.assertTrue(self._csv.siruta_is_valid(29))
         self.assertFalse(self._csv.siruta_is_valid("1234567"))
-        #this is a real, wrong SIRUTA code
+        # this is a real, wrong SIRUTA code
         self.assertFalse(self._csv.siruta_is_valid(86453))
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertFalse(self._csv.siruta_is_valid(179197))
 
     def test_get_last_error(self):
@@ -152,116 +152,116 @@ class TestSirutaCsv(unittest.TestCase):
         err = self._csv.get_last_error()
         myerr = "SIRUTA code %d is not in the database" % invalid_siruta
         self.assertEqual(err, myerr)
-        
+
     def test_get_sup_code(self):
         self.assertEqual(self._csv.get_sup_code(10), 1)
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_sup_code(179197), None)
-        
+
     def test_get_sup_name(self):
         self.assertEqual(self._csv.get_sup_name(10), None)
-        self.assertEqual(self._csv.get_sup_name(1017), 
+        self.assertEqual(self._csv.get_sup_name(1017),
                          u"JUDEȚUL ALBA")
-        self.assertEqual(self._csv.get_sup_name(1017, prefix=False), 
+        self.assertEqual(self._csv.get_sup_name(1017, prefix=False),
                          u"ALBA")
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_sup_name(179197), None)
-        
+
     def test_get_postal_code(self):
         self.assertEqual(self._csv.get_postal_code(10), 0)
         self.assertEqual(self._csv.get_postal_code(1035), 510001)
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_postal_code(179197), None)
-    
+
     def test_get_type(self):
         self.assertEqual(self._csv.get_type(179132), 9)
         self.assertEqual(self._csv.get_type(86453), 3)
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_type(179197), None)
-        
+
     def test_get_county(self):
         self.assertEqual(self._csv.get_county(179132), 40)
         self.assertEqual(self._csv.get_county(86453), 19)
         self.assertEqual(self._csv.get_county(179197), None)
-    
+
     def test_get_type_string(self):
-        self.assertEqual(self._csv.get_type_string(179132), 
+        self.assertEqual(self._csv.get_type_string(179132),
                          u"localitate  componentă, reședință de municipiu")
         self.assertEqual(self._csv.get_type_string(86453), u"comună")
         self.assertEqual(self._csv.get_type_string(179197), None)
-        
+
     def test_get_county_string(self):
-        self.assertEqual(self._csv.get_county_string(179132), 
+        self.assertEqual(self._csv.get_county_string(179132),
                          u"MUNICIPIUL BUCUREȘTI")
-        self.assertEqual(self._csv.get_county_name(86453), 
+        self.assertEqual(self._csv.get_county_name(86453),
                          u"JUDEȚUL HARGHITA")
-        self.assertEqual(self._csv.get_county_string(86453, prefix=False), 
+        self.assertEqual(self._csv.get_county_string(86453, prefix=False),
                          u"HARGHITA")
         self.assertEqual(self._csv.get_county_string(179197), None)
-        
+
     def test_get_region(self):
         self.assertEqual(self._csv.get_region(179132), 8)
         self.assertEqual(self._csv.get_region(86453), 7)
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_region(179197), None)
 
     def test_get_region_string(self):
         self.assertEqual(self._csv.get_region_string(179132), u"București-Ilfov")
         self.assertEqual(self._csv.get_region_name(86453), u"Centru")
-        #this is an imaginary, wrong SIRUTA code
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_region_string(179197), None)
-        
+
     def test_get_code_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_code_by_name, "JUDEȚUL ALBA")
-        
+
     def test_get_sup_code_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_sup_code_by_name, "JUDEȚUL ALBA")
-        
+
     def test_get_sup_name_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_sup_name_by_name, "JUDEȚUL ALBA")
-        
+
     def test_get_postal_code_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_postal_code_by_name, "JUDEȚUL ALBA")
-    
+
     def test_get_type_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_type_by_name, "JUDEȚUL ALBA")
-        
+
     def test_get_county_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_county_by_name, "JUDEȚUL ALBA")
-        
+
     def test_get_region_by_name(self):
         self.assertRaises(NotImplementedError, self._csv.get_region_by_name, "JUDEȚUL ALBA")
-        
+
     def test_get_inf_codes(self):
         self.assertItemsEqual(self._csv.get_inf_codes(86453), [84139])
-        self.assertItemsEqual(self._csv.get_inf_codes(85984), 
-                         [85993,86008,86017,86026,86035,86044,86053,
-                         86062,86071,86080,86099,86106,86115,86124])
-        #this is an imaginary, wrong SIRUTA code
+        self.assertItemsEqual(self._csv.get_inf_codes(85984),
+                              [85993, 86008, 86017, 86026, 86035, 86044, 86053,
+                              86062, 86071, 86080, 86099, 86106, 86115, 86124])
+        # this is an imaginary, wrong SIRUTA code
         self.assertEqual(self._csv.get_inf_codes(179197), None)
-        
+
     def test_get_all_counties(self):
         self.maxDiff = None
-        
+
         county_names_without_prefix = county_names + [u"BUCUREȘTI"]
         self.assertItemsEqual(self._csv.get_all_counties(prefix=False), county_names_without_prefix)
-        
+
         county_names_with_prefix = [u"JUDEȚUL " + name for name in county_names]
         county_names_with_prefix.append(u"MUNICIPIUL BUCUREȘTI")
         self.assertItemsEqual(self._csv.get_all_counties(prefix=True), county_names_with_prefix)
-        
+
     def test_get_siruta_list(self):
         import sirutalib
         self._csv._enforce_warnings = True
         try:
-            self.assertRaises(sirutalib.SirutaCodeWarning, 
+            self.assertRaises(sirutalib.SirutaCodeWarning,
                               self._csv.get_siruta_list, 1, None)
-            self.assertRaises(sirutalib.SirutaCodeWarning, 
+            self.assertRaises(sirutalib.SirutaCodeWarning,
                               self._csv.get_siruta_list, None, 1)
         finally:
             self._csv._enforce_warnings = False
 
-        self.assertEqual(self._csv.get_siruta_list([1,3,5], [1]), [1017, 13169, 26564])
+        self.assertEqual(self._csv.get_siruta_list([1, 3, 5], [1]), [1017, 13169, 26564])
         self.assertEqual(self._csv.get_siruta_list(None, 1), [])
         self.assertEqual(self._csv.get_siruta_list(1, None), [])
         self.assertEqual(self._csv.get_siruta_list(None, None, "VADU LAT"), [101430])
@@ -271,9 +271,9 @@ class TestSirutaCsv(unittest.TestCase):
 
     def test_diacritics_variations(self):
         self._csv.set_diacritics_params(cedilla=True, acircumflex=False)
-        self.assertEqual(self._csv.get_county_string(179132), 
+        self.assertEqual(self._csv.get_county_string(179132),
                          u"MUNICIPIUL BUCUREŞTI")
-        self.assertEqual(self._csv.get_county_string(86453), 
+        self.assertEqual(self._csv.get_county_string(86453),
                          u"JUDEŢUL HARGHITA")
         self.assertEqual(self._csv.get_county_string(179197), None)
         self.assertEqual(self._csv.get_name(178849),
@@ -293,10 +293,10 @@ class TestSirutaCsv(unittest.TestCase):
         self.assertEqual(csv._file, os.path.abspath("siruta.csv"))
         try:
             self.assertRaises(sirutalib.SirutaCodeWarning,
-                                 sirutalib.SirutaDatabase, "nonexistent.csv")
+                              sirutalib.SirutaDatabase, "nonexistent.csv")
         finally:
             pass
 
-    
+
 if __name__ == '__main__':
     unittest.main()

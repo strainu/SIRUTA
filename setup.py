@@ -11,14 +11,15 @@ data_path = os.path.join(sys.prefix, 'sirutalib')
 HERE = pathlib.Path(__file__).parent
 
 # The text of the README file
-README = (HERE / "README.rst").read_text()
+README = (HERE / "README.md").read_text()
+
 
 class custom_install_data(distutils.command.install_data.install_data):
     """need to change self.install_dir to the actual library dir"""
     def run(self):
         install_cmd = self.get_finalized_command('install')
         self.install_dir = getattr(install_cmd, 'install_lib')
-        self.data_files = [('',['siruta.csv'])]
+        self.data_files = [('', ['siruta.csv'])]
         return distutils.command.install_data.install_data.run(self)
 
 
@@ -28,13 +29,13 @@ setup(name='sirutalib',
       author_email='siruta@strainu.ro',
       description="Work with the Romanian settlement database, SIRUTA",
       long_description=README,
-      long_description_content_type="text/x-rst",
+      long_description_content_type="text/markdown",
       url='http://proiecte.strainu.ro/siruta/',
       license='3-clause BSD',
       py_modules=['sirutalib'],
       data_files=[
           ('', ['siruta.csv', 'README.rst', 'doc/help.html']),
-          ],
-      cmdclass = { 'install_data':    custom_install_data },
+      ],
+      cmdclass={'install_data': custom_install_data},
       setup_requires=['wheel']
       )
