@@ -36,8 +36,8 @@ those, 76 can be calculated if the code is filled with 0\'s to the
 # Getting the library
 
 You can either [download the tar
-file](https://github.com/strainu/SIRUTA/releases/download/v1.1/SIRUTAlib-1.1.tar.gz)
-([mirror](http://proiecte.strainu.ro/siruta/SIRUTAlib-1.1.tar.gz)) or
+file](https://github.com/strainu/SIRUTA/releases/download/v1.2.1/SIRUTAlib-1.2.1.tar.gz)
+([mirror](http://proiecte.strainu.ro/siruta/SIRUTAlib-1.2.1.tar.gz)) or
 get the source code, as described in the
 `development-label`{.interpreted-text role="ref"} section.
 

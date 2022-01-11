@@ -23,12 +23,12 @@ class custom_install_data(distutils.command.install_data.install_data):
 
 
 setup(name='sirutalib',
-      version='1.2',
+      version='1.2.1',
       author='Andrei Cipu',
       author_email='siruta@strainu.ro',
       description="Work with the Romanian settlement database, SIRUTA",
       long_description=README,
-      long_description_content_type="text/markdown",
+      long_description_content_type="text/x-rst",
       url='http://proiecte.strainu.ro/siruta/',
       license='3-clause BSD',
       py_modules=['sirutalib'],
