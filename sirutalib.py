@@ -220,13 +220,13 @@ class SirutaDatabase:
 
         """
         ret = []
-        if county_list is not None and type(county_list) != list:
+        if county_list is not None and type(county_list) is not list:
             self.__notify_error("Invalid county required")
             return ret
-        if type_list is not None and type(type_list) != list:
+        if type_list is not None and type(type_list) is not list:
             self.__notify_error("Invalid type required")
             return ret
-        if name is not None and type(name) != str:
+        if name is not None and type(name) is not str:
             self.__notify_error("Invalid name required")
             return ret
 
@@ -286,7 +286,7 @@ class SirutaDatabase:
         :rtype: bool
 
         """
-        if type(siruta) != int:
+        if type(siruta) is not int:
             siruta = int(siruta)
         if siruta >= 10**6:
             return False
