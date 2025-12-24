@@ -24,7 +24,7 @@ class custom_install_data(distutils.command.install_data.install_data):
 
 
 setup(name='sirutalib',
-      version='1.2.1',
+      version='1.3.0',
       author='Andrei Cipu',
       author_email='siruta@strainu.ro',
       description="Work with the Romanian settlement database, SIRUTA",
