@@ -171,7 +171,7 @@ class SirutaDatabase:
                     continue
                 if not self.siruta_is_valid(siruta):
                     self.__notify_error("SIRUTA code %d is not valid" % siruta)
-                if len(row) != 15:
+                if len(row) != 12:
                     self.__notify_error("Line %s does not have 15 elements" % str(row))
                     continue
                 if row[7] == "1":
