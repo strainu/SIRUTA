@@ -31,7 +31,7 @@ setup(name='sirutalib',
       long_description=README,
       long_description_content_type="text/markdown",
       url='http://proiecte.strainu.ro/siruta/',
-      license='3-clause BSD',
+      license='BSD-3-Clause',
       py_modules=['sirutalib'],
       data_files=[
           ('', ['siruta.csv', 'README.rst', 'doc/help.html']),
